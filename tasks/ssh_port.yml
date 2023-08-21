@@ -1,0 +1,42 @@
+- name: Use default credentials for ssh
+  set_fact:
+    ansible_user: "{{ admin_username }}"
+
+- name: Attempt ssh connection
+  become: no
+  raw: "echo Pong!"
+  ignore_unreachable: true
+  changed_when: false
+  register: ssh_result_default
+
+- name: Use fallback port for ssh
+  set_fact:
+    ansible_ssh_port: 22
+  when:
+    - ssh_result_default is unreachable
+
+- name: Attempt ssh connection
+  become: no
+  raw: "echo Pong!"
+  ignore_unreachable: true
+  changed_when: false
+  register: ssh_result_port
+  when:
+    - ssh_result_default is unreachable
+
+- name: Use fallback port and default Arch Linux ARM credentials for ssh
+  set_fact:
+    ansible_ssh_port: "22"
+    ansible_user: "alarm"
+    ansible_ssh_password: "alarm"
+  when:
+    - ssh_result_default is unreachable
+    - ssh_result_port is unreachable
+
+- name: Attempt ssh connection
+  become: no
+  changed_when: false
+  raw: "echo Pong!"
+  when:
+    - ssh_result_default is unreachable
+    - ssh_result_port is unreachable

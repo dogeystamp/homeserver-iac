@@ -1,0 +1,7 @@
+---
+
+# these are defaults
+# set these in host/group vars
+
+email: dogeystamp@disroot.org
+dyndns_domain: null

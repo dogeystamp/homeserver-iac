@@ -1,0 +1,41 @@
+#!/bin/sh
+
+set -e
+
+# Local backup script (run as root)
+
+echo "Creating mountpoint."
+mkdir -p /mnt/disk_b/
+
+echo "Preparing to decrypt backup disk..."
+sleep 5
+echo "Decrypting disk..."
+cryptsetup luksOpen {{ backup_disk_dev }} disk_b --key-file /k5e
+echo "Disk decrypted."
+
+echo "Mounting backup disk."
+mount /dev/mapper/disk_b /mnt/disk_b
+
+if ! mountpoint -q /mnt/disk;
+then
+	echo "Missing data disk mount!"
+	exit
+fi
+
+mkdir -p /mnt/disk_b/bkd/
+rsync -avxP --delete \
+	--exclude={{ dataroot }}/navidrome/cache \
+	--exclude={{ dataroot }}/synapse/media_store \
+	/mnt/disk/ /mnt/disk_b/bkd/
+
+echo "Preparing to unmount backup disk."
+sleep 5
+echo "Unmounting backup disk."
+umount /mnt/disk_b
+echo "Unmounted backup disk."
+
+echo "Preparing to close backup disk."
+sleep 5
+echo "Closing backup disk."
+cryptsetup luksClose /dev/mapper/disk_b
+echo "Disk closed."

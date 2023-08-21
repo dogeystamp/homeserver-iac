@@ -1,0 +1,13 @@
+$TTL    604800
+@       IN      SOA     {{ dyndns_domain }}. {{ email }}. (
+                              3         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+ns IN A {{ local_ip }}
+@       IN      NS      localhost.
+@       IN      A       {{ local_ip }}
+@       IN      AAAA    ::1
+{{ dyndns_domain }} IN A {{ local_ip }}

@@ -1,0 +1,6 @@
+---
+
+# override this in host/group vars
+
+external_disk_dev: /dev/sda1
+backup_disk_dev: /dev/sda2

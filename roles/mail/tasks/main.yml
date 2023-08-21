@@ -1,0 +1,19 @@
+- name: Install mail packages
+  community.general.pacman:
+    name:
+      - neomutt
+      - exim
+
+    state: present
+
+- name: Redirect root mail to ansible agent
+  lineinfile:
+    dest: /etc/mail/aliases
+    regexp: "^#root:"
+    line: "root: {{ ansible_user }}"
+
+- name: Enable exim
+  service:
+    name: exim
+    state: started
+    enabled: yes

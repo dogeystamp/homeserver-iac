@@ -1,0 +1,15 @@
+- name: Install packages
+  community.general.pacman:
+    name: ddclient
+    state: present
+
+- name: Configure dynamic DNS
+  template:
+    src: ddclient.conf.j2
+    dest: /etc/ddclient/ddclient.conf
+
+- name: Enable dynamic DNS service
+  service:
+    name: ddclient
+    enabled: yes
+    state: started

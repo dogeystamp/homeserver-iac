@@ -1,0 +1,7 @@
+---
+# Dotfiles repos (could be localhost if Gitea is installed)
+dots_repo: https://git.dogeystamp.com/dogeystamp/dots.git
+
+# deploy dotfiles on these users
+dotfile_users:
+  - "{{ ansible_user }}"

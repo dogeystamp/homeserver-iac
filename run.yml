@@ -1,0 +1,69 @@
+---
+- hosts: all
+  become: yes
+
+  gather_facts: no
+
+  pre_tasks:
+    - import_tasks: tasks/set_host.yml
+      tags:
+        - always
+        - host
+    - import_tasks: tasks/ssh_port.yml
+      tags:
+        - always
+        - port
+    - import_tasks: tasks/bootstrap.yml
+      tags:
+        - bootstrap
+
+  roles:
+    - role: system
+      tags:
+        - system
+    
+    - role: dotfiles
+      tags:
+        - dotfiles
+    
+    - role: filesystems
+      tags:
+        - filesystems
+      when: external_disk
+
+    - role: backup
+      tags:
+        - backup
+      when: backup_disk
+
+    - role: networking/connection
+      tags:
+        - connection
+      when: enable_connection
+
+    - role: firewall
+      tags:
+        - firewall
+
+    - role: ddclient
+      tags:
+        - ddclient
+      when: "ddclient" in services
+        
+    - role: networking/nameserver
+      tags:
+        - nameserver
+      when: "nameserver" in services
+    
+    - role: services/mail
+      tags:
+        - mail
+      when: "mailserver" in services
+
+    - role: dotfiles
+      tags:
+        - dotfiles
+      when: enable_dotfiles
+      dotfile_users:
+        - "{{ ansible_user }}"
+        - "{{ username }}"

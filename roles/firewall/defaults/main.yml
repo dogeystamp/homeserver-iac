@@ -1,0 +1,10 @@
+---
+# set these in host/group vars
+# these are defaults
+
+# LAN static IP address
+local_subnet: 192.168.0.0/24
+# local IP of bastion node
+bastion_ip: null
+
+sshd_port: 2500

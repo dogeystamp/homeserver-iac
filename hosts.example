@@ -1,0 +1,11 @@
+# Copy this to hosts.
+
+# If it exists, fallback_host will be used if local_host is inaccessible.
+# This won't work for anything other than the bastion node,
+# since only it can be accessed outside the LAN.
+
+[bastion]
+your_hostname local_host=alarm1.local fallback_host=www.dogeystamp.com ansible_port=2500 ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/keys/your_hostname
+
+[fleet]
+your_hostname local_host=alarm2.local ansible_port=2500 ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/keys/your_hostname

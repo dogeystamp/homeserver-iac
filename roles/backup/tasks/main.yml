@@ -1,0 +1,5 @@
+- name: Deploy backup script
+  template:
+    src: lbk.sh.j2
+    dest: "/home/{{ admin_username }}/.local/bin/lbk.sh"
+    mode: 0755

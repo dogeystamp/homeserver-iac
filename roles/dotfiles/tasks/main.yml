@@ -1,0 +1,32 @@
+- name: Fetch dotfiles
+  git:
+    repo: "{{ dots_repo }}"
+    dest: "/srv/dots/"
+  register: dotfiles
+
+- name: Remove existing dotfiles
+  file:
+    path: "/home/{{ item }}/.bashrc"
+    state: absent
+  with_items: "{{ dotfile_users }}"
+  when: dotfiles.changed
+
+- name: Copy dotfiles
+  copy:
+    remote_src: yes
+    src: /srv/dots/
+    dest: "/home/{{ item }}/dots/"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+  with_items: "{{ dotfile_users }}"
+  when: dotfiles.changed
+
+- name: Deploy dotfiles on login
+  template:
+    src: templates/bash_profile.j2
+    dest: "/home/{{ item }}/.bash_profile"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    force: yes
+  with_items: "{{ dotfile_users }}"
+  when: dotfiles.changed

@@ -1,0 +1,55 @@
+- name: Set locale
+  community.general.locale_gen:
+    name: en_US.UTF-8
+    state: present
+
+- name: Change hostname
+  hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: Set MOTD
+  template:
+    src: motd.j2
+    dest: /etc/motd
+
+- name: Update packages
+  community.general.pacman:
+    update_cache: yes
+    upgrade: yes
+
+- name: Determine if reboot for kernel update is needed
+  shell:
+    cmd: "if [[ $(pacman -Q linux | cut -d \" \" -f 2) > $(uname -r) ]]; then echo reboot; fi"
+  register: reboot_check
+  changed_when: reboot_check.stdout == "reboot"
+
+- name: Reboot for kernel update
+  reboot:
+  when:
+    reboot_check.stdout == "reboot"
+
+- name: Install utility packages
+  community.general.pacman:
+    name: "{{ util_pack }}"
+    state: present
+
+- name: Disable root login
+  user:
+    name: root
+    password: "*"
+
+- name: Create unpriviledged user
+  user:
+    name: "{{ username }}"
+
+- name: Deploy SSH key to unpriviledged user
+  ansible.posix.authorized_key:
+    user: "{{ username }}"
+    state: present
+    key: "{{ lookup('file', '~/.ssh/keys/{{ inventory_hostname }}.pub')}}"
+
+- name: Enable cron daemon
+  service:
+    name: cronie
+    state: started
+    enabled: yes

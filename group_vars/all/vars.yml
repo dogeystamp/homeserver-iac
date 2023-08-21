@@ -1,0 +1,29 @@
+---
+
+# these settings should be modified in host_vars,
+# cause they're mostly defaults
+
+# set up external data disk
+# also see roles/filesystems/defaults/main.yml
+external_disk: no
+# this exists solely because one time my external disk's ext4 partition disappeared?
+# anyways now it keeps a copy of files away from syncthing in case it turns evil
+# it's just an rsync shell script
+backup_disk: no
+
+# where data goes
+# if you have external_disk on, you should probably set this to a path there
+dataroot: /var/www/data
+
+# send dynamic DNS update for this domain
+dyndns_domain: null
+# dyndns_domain: d.nerdpol.ovh
+
+# real public facing domain
+# use CNAME entries to redirect subdomains to dyndns_domain
+# this could be the same as dyndns_domain if your registrar supports dyndns
+domain: null
+# domain: dogeystamp.com
+
+# clone dotfiles and stuff
+enable_dotfiles: yes

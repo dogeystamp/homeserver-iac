@@ -1,0 +1,63 @@
+- name: Determine whether initial setup is needed
+  set_fact:
+    initial_setup: yes
+  when:
+    ansible_user != admin_username
+
+- name: Fallback to su
+  set_fact:
+    ansible_become_method: "su"
+    ansible_become_user: "root"
+    ansible_become_password: "root"
+  when:
+    initial_setup is defined
+
+- setup:
+
+- name: Install opendoas
+  community.general.pacman:
+    name: opendoas
+    state: present
+
+- name: Configure doas
+  template:
+    src: doas.conf.j2
+    dest: /etc/doas.conf
+
+- name: Create priviledged user
+  user:
+    name: "{{ admin_username }}"
+    groups: wheel
+
+- name: Deploy SSH key to admin user
+  ansible.posix.authorized_key:
+    user: "{{ admin_username }}"
+    state: present
+    key: "{{ lookup('file', '~/.ssh/keys/{{ inventory_hostname }}.pub')}}"
+
+- name: Create .local/bin for administrator
+  file:
+    path: "/home/{{ admin_username }}/.local/bin/"
+    state: directory
+    owner: "{{ admin_username }}"
+    group: "{{ admin_username }}"
+
+- name: Reset variables to before fallback
+  set_fact:
+    ansible_become_method: "{{ escalation_method }}"
+    ansible_user: "{{ admin_username }}"
+    ansible_ssh_password: ""
+  when:
+    initial_setup is defined
+
+- name: Reconnect as new administrator
+  wait_for_connection:
+    timeout: 10
+  when:
+    initial_setup is defined
+
+- name: Delete initial user
+  user:
+    name: "alarm"
+    force: yes
+    state: absent

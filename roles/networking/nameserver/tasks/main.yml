@@ -1,0 +1,22 @@
+- name: Install nameserver packages
+  community.general.pacman:
+    name: bind
+    state: present
+
+- name: Configure nameserver
+  template:
+    src: named.conf.j2
+    dest: /etc/named.conf
+  notify: Restart nameserver
+
+- name: Add nameserver zone
+  template:
+    src: local_zone.j2
+    dest: "/var/named/{{ domain }}"
+  notify: Restart nameserver
+
+- name: Enable nameserver
+  service:
+    name: named
+    enabled: yes
+    state: started

@@ -1,0 +1,69 @@
+- name: Install packages
+  community.general.pacman:
+    name:
+      - ufw
+
+- name: Deny all ports by default
+  community.general.ufw:
+    policy: deny
+
+- name: Set default sources (bastion server)
+  set_fact:
+    default_firewall_src: any
+  when: "bastion" in group_names
+
+- name: Set default sources (fleet server)
+  set_fact:
+    default_firewall_src: "{{ bastion_ip }}"
+  when: "fleet" in group_names
+
+- name: Allow service ports
+  community.general.ufw:
+    rule: allow
+    port: "{{ item.port }}"
+    proto: "{{ item.proto | default('tcp') }}"
+    state: "{{ 'enabled' if item.name in services else 'disabled' }}"
+    src: "{{ item.src | default(default_firewall_src) }}"
+  with_item:
+    # matrix ports
+    - name: "synapse"
+      port: 8448
+    - name: "synapse"
+      port: 8008
+
+    # navidrome api/web interface
+    - name: "navidrome"
+      port: 4533
+
+    - name: "syncthing"
+      port: 22000
+      proto: any
+      src: "{{ local_subnet }}"
+
+    - name: "sshd"
+      port: "{{ sshd_port }}"
+      src: "{{ 'any' if 'bastion' in group_names else local_subnet }}"
+
+    # gitea sshd
+    - name: "gitea"
+      port: 2499
+    # gitea http
+    - name: "gitea"
+      port: 3000
+
+    - name: "caddy"
+      port: 80
+    - name: "caddy"
+      port: 443
+
+    - name: "nameserver"
+      port: domain
+      proto: any
+      src: "{{ local_subnet }}"
+
+
+- name: Enable firewall service
+  service:
+    name: ufw
+    state: started
+    enabled: yes

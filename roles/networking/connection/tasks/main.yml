@@ -1,0 +1,65 @@
+- name: Install packages
+  community.general.pacman:
+    name:
+      - networkmanager
+
+- name: Enable NetworkManager
+  service:
+    name: NetworkManager
+    enabled: yes
+    state: started
+
+- name: Send script to remove externally managed eth0 connection
+  template:
+    src: rmconn.sh
+    dest: /root/rmconn.sh
+    mode: 700
+  register: rmconn
+
+- name: Run rmconn every 30 minutes
+  cron:
+    name: "Ensure eth0 is not externally managed"
+    minute: "*/30"
+    job: "/root/rmconn.sh"
+    state: present
+
+- name: Run rmconn every minute (temporarily)
+  cron:
+    name: "Ensure eth0 is not externally managed (temporary)"
+    minute: "*"
+    job: "/root/rmconn.sh"
+    state: present
+  when: rmconn.changed
+
+- name: Run rmconn at boot
+  cron:
+    name: "Ensure eth0 is not externally managed (at reboot)"
+    special_time: reboot
+    job: "/root/rmconn.sh"
+    state: present
+
+- name: Create NetworkManager connection
+  community.general.nmcli:
+    dns4: "{{ local_ip }}"
+    dns4_ignore_auto: yes
+    ip4: "{{ local_ip }}{{ subnet_prefix }}"
+    gw4: "{{ gateway }}"
+    method4: manual
+    state: present
+    conn_name: wired
+    ifname: "{{ net_interface }}"
+    type: ethernet
+  register: nmcli_conf
+  changed_when: false
+  poll: 0
+  async: 1000
+
+- name: Attempt to reconnect
+  wait_for_connection:
+    timeout: 240
+  when: nmcli_conf.changed
+
+- name: Remove rmconn task at every minute
+  cron:
+    name: "Ensure eth0 is not externally managed (temporary)"
+    state: absent

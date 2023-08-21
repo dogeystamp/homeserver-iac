@@ -1,0 +1,9 @@
+- name: Check if Python is present
+  ping:
+  ignore_errors: true
+  register: ping
+
+- name: Bootstrap Python
+  become: no
+  raw: "echo root | su -c 'pacman-key --init && pacman-key --populate archlinuxarm && pacman --noconfirm -Syu python' root"
+  when: ping is failed

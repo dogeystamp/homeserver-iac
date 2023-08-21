@@ -1,0 +1,39 @@
+// vim:set ts=4 sw=4 et:
+
+acl internals { 127.0.0.0/8; {{ local_subnet }}; };
+
+options {
+    directory "/var/named";
+    pid-file "/run/named/named.pid";
+    forwarders { {{ dns_forward }}; };
+
+    listen-on { any; };
+
+    recursion yes;
+    allow-recursion { any; };
+    allow-query { internals; };
+    allow-transfer { none; };
+    dnssec-validation no;
+    resolver-query-timeout 30000;
+};
+
+zone "localhost" IN {
+    type master;
+    file "localhost.zone";
+};
+
+zone "0.0.127.in-addr.arpa" IN {
+    type master;
+    file "127.0.0.zone";
+};
+
+zone "{{ dyndns_domain }}" {
+             type master;
+             file "/var/named/{{ dyndns_domain }}";
+        };
+
+
+zone "1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa" {
+    type master;
+    file "localhost.ip6.zone";
+};

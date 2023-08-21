@@ -1,0 +1,26 @@
+- name: Deploy keyfile
+  copy:
+    src: "{{ inventory_hostname }}".secret
+    dest: /k5e
+    mode: 0600
+
+- name: Setup crypttab
+  community.general.crypttab:
+    backing_device: "{{ external_disk_dev }}"
+    name: disk
+    state: present
+    password: /k5e
+
+- name: Decrypt secondary disk
+  luks_device:
+    device: "{{ external_disk_dev }}"
+    keyfile: /k5e
+    name: disk
+    state: opened
+
+- name: Setup fstab
+  mount:
+    path: /mnt/disk
+    src: /dev/mapper/disk
+    state: mounted
+    fstype: ext4

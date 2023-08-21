@@ -1,0 +1,11 @@
+---
+# override these in host_vars
+
+# static IP interface
+net_interface: eth0
+# LAN static IP address
+local_ip: null
+subnet_prefix: /24
+local_subnet: 192.168.0.0/24
+# router IP address
+gateway: null

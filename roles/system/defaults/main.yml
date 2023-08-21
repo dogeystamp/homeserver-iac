@@ -1,0 +1,24 @@
+---
+# set these in host/group vars
+# these are defaults
+
+sshd_port: 2500
+
+# Username for unprivileged user
+username: dogeystamp
+# Username for the administrator
+admin_username: dominus
+
+# Extra packages
+util_pack:
+  - neovim
+  - neofetch
+  - fish
+  - glances
+  - tmux
+  - git
+  - cronie
+  - moreutils
+  - progress
+  - rsync
+  - man-db

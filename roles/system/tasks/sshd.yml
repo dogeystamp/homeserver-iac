@@ -1,0 +1,29 @@
+- name: Disable SSH password auth
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^#PasswordAuthentication yes"
+    line: "PasswordAuthentication no"
+  register: sshd_config
+
+- name: Change SSH port
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^#Port 22"
+    line: "Port {{ sshd_port }}"
+  register: sshd_config
+
+- name: Restart SSHD
+  service:
+    name: sshd
+    state: restarted
+  when: sshd_config.changed
+
+- name: Reset ansible_ssh_port
+  set_fact:
+    ansible_ssh_port: "{{ sshd_port }}"
+  when: sshd_config.changed
+
+- name: Reconnect under new port
+  wait_for_connection:
+    timeout: 10
+  when: sshd_config.changed

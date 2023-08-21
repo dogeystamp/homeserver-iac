@@ -1,0 +1,12 @@
+---
+
+# set these in host vars
+# these are mostly defaults
+
+- services:
+  - "sshd"
+  - "mailserver"
+  - "gitea"
+  - "synapse"
+  - "navidrome"
+  - "syncthing"
