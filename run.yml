@@ -48,17 +48,22 @@
     - role: ddclient
       tags:
         - ddclient
-      when: "ddclient" in services
+      when: enable_ddclient
         
     - role: networking/nameserver
       tags:
         - nameserver
-      when: "nameserver" in services
+      when: "nameserver" in group_names
     
-    - role: services/mail
+    - role: mail
       tags:
         - mail
-      when: "mailserver" in services
+      when: "mailserver" in group_names
+
+    - role: caddy
+      tags:
+        - caddy
+      when: "caddy" in group_names
 
     - role: dotfiles
       tags:
@@ -68,7 +73,7 @@
         - "{{ ansible_user }}"
         - "{{ username }}"
 
-    - role: services/website
+    - role: website
       tags:
         - website
-      when: website in services
+      when: "website" in group_names

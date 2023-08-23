@@ -1,16 +1,16 @@
-- name: Determine if host is up at local hostname
-  local_action: "command ping -c 1 {{ local_host }}"
+- name: Determine if host is up at static IP
+  local_action: "command ping -c 1 {{ local_ip }}"
   become: no
   ignore_errors: true
   changed_when: false
   register: up_static
 
-- name: Switch ansible_host to fallback IP
+- name: Switch ansible_host to fallback
   set_fact:
     ansible_host: "{{ fallback_host }}"
-  when: up_static.rc != 0
+  when: up_static.rc != 0 
 
-- name: Switch ansible_host to local hostname
+- name: Switch ansible_host to static IP
   set_fact:
-    ansible_host: "{{ local_host }}"
+    ansible_host: "{{ local_ip }}"
   when: up_static.rc == 0

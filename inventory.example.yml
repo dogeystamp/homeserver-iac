@@ -1,0 +1,63 @@
+# Copy this to inventory.yml and modify accordingly
+
+
+# fallback_host is only used during setup before the static IP (local_ip) is configured.
+# local_ip is used after first setup.
+
+# Make sure to make entries in your .ssh/config for each hostname
+# Otherwise Ansible doesn't know how to resolve them
+# Example:
+#
+#   Host your_fleet_host
+#	  HostName 192.168.0.86
+#	  Port 2500
+#	  IdentityFile ~/.ssh/keys/your_fleet_host
+
+
+all:
+  hosts:
+    your_bastion_host:
+      fallback_host: alarm1.local
+      local_ip: 192.168.0.3
+      ansible_port: 2500
+      ansible_connection: ssh
+      ansible_ssh_private_key_file: ~/.ssh/keys/your_bastion_host
+    your_fleet_host:
+      fallback_host: alarm2.local
+      local_ip: 192.168.0.86
+      ansible_port: 2500
+      ansible_connection: ssh
+      ansible_ssh_private_key_file: ~/.ssh/keys/your_fleet_host
+  children:
+    fleet:
+      children:
+        gitea:
+          hosts:
+            your_fleet_host:
+        syncthing:
+          hosts:
+            your_fleet_host:
+        synapse:
+          hosts:
+            your_fleet_host:
+        navidrome:
+          hosts:
+            your_fleet_host:
+    bastion:
+      children:
+        ddclient:
+          hosts:
+            your_bastion_host:
+    nameserver:
+      hosts:
+        your_bastion_host:
+    caddy:
+      hosts:
+        your_bastion_host:
+    sshd:
+      hosts:
+        your_bastion_host:
+        your_fleet_host:
+    website:
+      hosts:
+        your_bastion_host:

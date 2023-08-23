@@ -19,6 +19,9 @@ dataroot: /var/www/data
 dyndns_domain: null
 # dyndns_domain: d.nerdpol.ovh
 
+# this is set true in group_vars/bastion/vars.yml
+enable_ddclient: false
+
 # real public facing domain
 # use CNAME entries to redirect subdomains to dyndns_domain
 # this could be the same as dyndns_domain if your registrar supports dyndns

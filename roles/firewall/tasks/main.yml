@@ -22,7 +22,7 @@
     rule: allow
     port: "{{ item.port }}"
     proto: "{{ item.proto | default('tcp') }}"
-    state: "{{ 'enabled' if item.name in services else 'disabled' }}"
+    state: "{{ 'enabled' if item.name in group_names else 'disabled' }}"
     src: "{{ item.src | default(default_firewall_src) }}"
   with_item:
     # matrix ports

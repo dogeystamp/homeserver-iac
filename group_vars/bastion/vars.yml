@@ -10,3 +10,5 @@
   - "website"
   - "nameserver"
   - "mailserver"
+
+enable_ddclient: true
