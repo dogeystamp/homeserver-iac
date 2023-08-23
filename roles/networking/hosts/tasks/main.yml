@@ -1,0 +1,6 @@
+---
+
+- name: Deploy /etc/hosts template
+  template:
+    src: hosts.j2
+    dest: /etc/hosts
