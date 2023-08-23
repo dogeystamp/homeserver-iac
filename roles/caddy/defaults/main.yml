@@ -1,0 +1,7 @@
+---
+
+# these are defaults
+# override these in group/host vars
+
+# web root directory
+website_path: /srv/http

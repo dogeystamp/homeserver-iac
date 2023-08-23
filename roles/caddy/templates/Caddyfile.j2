@@ -1,0 +1,6 @@
+{% if website in servcices %}
+www.{{ domain }} {
+	root * {{ website_path }}
+	file_server
+}
+{% endif %}

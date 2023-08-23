@@ -67,3 +67,8 @@
       dotfile_users:
         - "{{ ansible_user }}"
         - "{{ username }}"
+
+    - role: services/website
+      tags:
+        - website
+      when: website in services

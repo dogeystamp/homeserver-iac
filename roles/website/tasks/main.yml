@@ -1,0 +1,59 @@
+- name: Create website deployment user
+  user:
+    name: "{{ website_username }}"
+
+- name: Install required packages
+  community.general.pacman:
+    name: 
+      - git
+      - make
+      - moreutils
+      - lowdown
+      - rsync
+    state: present
+
+- name: Fetch site source
+  git:
+    dest: "/home/{{ website_username }}/website"
+    repo: "{{ site_repo }}"
+  register: site_source
+  become_user: "{{ website_username }}"
+
+- name: Make site directory in web root
+  file:
+    group: caddy
+    owner: "{{ website_username }}"
+    path: "{{ website_path }}"
+    state: directory
+  register: site_folder
+
+- name: Deploy source to web root
+  make:
+    chdir: "/home/{{ website_username }}/website"
+    target: deploy
+    params:
+      OUTPUT: "{{ website_path }}"
+  when: site_source.changed or site_folder.changed
+  become_user: "{{ website_username }}"
+
+- name: Send deployment script
+  template:
+    src: deploy.sh.j2
+    dest: "/home/{{ website_username }}/deploy.sh"
+    mode: 0700
+    owner: "{{ website_username }}"
+
+- name: Tell cron to mail to root
+  cron:
+    user: "{{ website_username }}"
+    name: MAILTO
+    env: yes
+    job: root
+
+- name: Cronjob to deploy source
+  cron:
+    user: "{{ website_username }}"
+    name: "Update and deploy website source"
+    minute: 0
+    hour: "*/1"
+    job: "chronic /home/{{ website_username }}/deploy.sh"

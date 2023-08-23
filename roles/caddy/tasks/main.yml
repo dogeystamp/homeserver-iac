@@ -1,0 +1,17 @@
+---
+
+- name: Install Caddy packages
+  community.general.pacman:
+    name: caddy
+    state: present
+
+- name: Configure Caddy
+  template:
+    src: Caddyfile.j2
+    dest: /etc/caddy/Caddyfile
+
+- name: Enable Caddy service
+  service:
+    name: caddy
+    state: started
+    enabled: yes

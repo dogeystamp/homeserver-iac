@@ -1,0 +1,13 @@
+---
+
+# these are defaults
+# override these in group/host vars
+
+# this user takes care of building the website
+# caddy will serve it
+website_username: ianitor
+
+site_repo: https://git.dogeystamp.com/dogeystamp/wb5
+
+# site gets deployed here
+website_path: /srv/http
