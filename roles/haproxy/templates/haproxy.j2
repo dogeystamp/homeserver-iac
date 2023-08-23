@@ -1,0 +1,22 @@
+defaults
+	log global
+	mode tcp
+	timeout connect 10s
+	timeout client 36h
+	timeout server 36h
+
+{% if groups["gitea"] | length > 0 %}
+
+listen gitea_ssh
+	bind *:2499
+	balance leastconn
+	mode tcp
+
+	option tcp-check
+	tcp-check expect rstring SSH-2.0-OpenSSH.*
+
+{% for host in groups["gitea"] %}
+	server {{ host }} {{ host_vars[host]["local_ip"] }}:2499
+{% endfor %}
+
+{% endif %}

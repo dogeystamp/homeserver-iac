@@ -69,6 +69,11 @@
         - caddy
       when: "caddy" in group_names
 
+    - role: haproxy
+      tags:
+        - haproxy
+      when: "haproxy" in group_names
+
     - role: dotfiles
       tags:
         - dotfiles

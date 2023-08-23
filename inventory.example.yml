@@ -54,6 +54,9 @@ all:
     caddy:
       hosts:
         your_bastion_host:
+    haproxy:
+      hosts:
+        your_bastion_host:
     sshd:
       hosts:
         your_bastion_host:
