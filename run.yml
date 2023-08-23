@@ -54,6 +54,10 @@
       tags:
         - nameserver
       when: "nameserver" in group_names
+        
+    - role: networking/hosts
+      tags:
+        - hosts
     
     - role: mail
       tags:
