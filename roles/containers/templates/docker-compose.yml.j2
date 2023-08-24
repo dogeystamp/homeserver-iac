@@ -1,0 +1,29 @@
+# vim: ft=yaml
+---
+
+version: "3"
+
+networks:
+  gitea:
+    external: false
+
+services:
+{% if "gitea" in group_names %}
+  gitea:
+    container_name: gitea
+    image: gitea/gitea:latest
+    environment:
+      - USER=gitea
+    restart: unless-stopped
+    networks:
+      - gitea
+    volumes:
+      - {{ dataroot }}/gitea:/data
+      - {{  }}
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
+      - "222:22"
+
+{% endif %}

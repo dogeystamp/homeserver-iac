@@ -86,3 +86,8 @@
       tags:
         - website
       when: "website" in group_names
+
+    - role: containers
+      tags:
+        - containers
+      when: "fleet" in group_names

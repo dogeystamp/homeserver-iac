@@ -3,12 +3,4 @@
 # set these in host vars
 # these are mostly defaults
 
-- services:
-  - "sshd"
-  - "ddclient"
-  - "caddy"
-  - "website"
-  - "nameserver"
-  - "mailserver"
-
 enable_ddclient: true
