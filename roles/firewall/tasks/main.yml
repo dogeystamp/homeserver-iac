@@ -14,7 +14,7 @@
 
 - name: Set default sources (fleet server)
   set_fact:
-    default_firewall_src: "{{ host_vars[groups['bastion'][0]]['local_ip'] }}"
+    default_firewall_src: "{{ bastion_ip }}"
   when: "fleet" in group_names
 
 - name: Allow service ports
