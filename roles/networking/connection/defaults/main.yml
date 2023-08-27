@@ -9,3 +9,6 @@ subnet_prefix: /24
 local_subnet: 192.168.0.0/24
 # router IP address
 gateway: 192.168.0.1
+
+# Can be the server itself if it has a nameserver
+nameserver: "{{ hostvars[groups['nameserver'][0]]['local_ip'] }}"

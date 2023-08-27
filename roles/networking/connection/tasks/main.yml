@@ -38,9 +38,24 @@
     job: "/root/rmconn.sh"
     state: present
 
+- name: Disable DHCP DNS
+  template:
+    src: nodns.network.j2
+    dest: /etc/systemd/network/50-nodns.network
+
+- name: Create resolved configuration directory
+  file:
+    path: /etc/systemd/resolved.conf.d
+    state: directory
+
+- name: Set DNS
+  template:
+    src: dns_servers.conf.j2
+    dest: /etc/systemd/resolved.conf.d/50-dns_servers.conf
+
 - name: Create NetworkManager connection
   community.general.nmcli:
-    dns4: "{{ local_ip }}"
+    dns4: "{{ nameserver }}"
     dns4_ignore_auto: yes
     ip4: "{{ local_ip }}{{ subnet_prefix }}"
     gw4: "{{ gateway }}"
@@ -57,7 +72,7 @@
 - name: Attempt to reconnect
   wait_for_connection:
     timeout: 240
-  when: nmcli_conf.changed
+  when: nmcli_conf.changed or rmconn.changed
 
 - name: Remove rmconn task at every minute
   cron:
