@@ -22,8 +22,8 @@
     rule: allow
     port: "{{ item.port }}"
     proto: "{{ item.proto | default('tcp') }}"
-    state: "{{ 'enabled' if item.name in group_names else 'disabled' }}"
     src: "{{ item.src | default(default_firewall_src) }}"
+  when: item.name in group_names
   with_items:
     # matrix ports
     - name: "synapse"
@@ -61,6 +61,9 @@
       proto: any
       src: "{{ local_subnet }}"
 
+- name: Deny all ports by default
+  community.general.ufw:
+    enabled: true
 
 - name: Enable firewall service
   service:
