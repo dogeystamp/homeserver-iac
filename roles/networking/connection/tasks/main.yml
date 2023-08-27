@@ -52,6 +52,13 @@
   template:
     src: dns_servers.conf.j2
     dest: /etc/systemd/resolved.conf.d/50-dns_servers.conf
+  register: set_dns
+
+- name: Restart resolved
+  systemd:
+    name: systemd-resolved
+    state: restarted
+  when: set_dns.changed
 
 - name: Create NetworkManager connection
   community.general.nmcli:
@@ -69,10 +76,16 @@
   poll: 0
   async: 1000
 
+- name: Reset Ansible connection params
+  set_fact:
+    ansible_host: "{{ local_ip }}"
+  when: nmcli_conf.changed or rmconn.changed
+
 - name: Attempt to reconnect
   wait_for_connection:
     timeout: 240
   when: nmcli_conf.changed or rmconn.changed
+
 
 - name: Remove rmconn task at every minute
   cron:
