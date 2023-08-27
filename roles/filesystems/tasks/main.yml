@@ -1,6 +1,6 @@
 - name: Deploy keyfile
   copy:
-    src: "{{ inventory_hostname }}".secret
+    src: "{{ inventory_hostname }}.secret"
     dest: /k5e
     mode: 0600
 

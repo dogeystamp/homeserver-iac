@@ -5,5 +5,5 @@
 # Modifications will be lost!
 
 {% for host in groups["all"] %}
-{{ host_vars[host]["local_ip"] }} {{ host }}
+{{ hostvars[host]["local_ip"] }} {{ host }}
 {% endfor %}

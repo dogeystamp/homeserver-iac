@@ -22,10 +22,6 @@
       tags:
         - system
     
-    - role: dotfiles
-      tags:
-        - dotfiles
-    
     - role: filesystems
       tags:
         - filesystems
@@ -45,7 +41,7 @@
       tags:
         - firewall
 
-    - role: ddclient
+    - role: networking/ddclient
       tags:
         - ddclient
       when: enable_ddclient
@@ -53,7 +49,7 @@
     - role: networking/nameserver
       tags:
         - nameserver
-      when: "nameserver" in group_names
+      when: '"nameserver" in group_names'
         
     - role: networking/hosts
       tags:
@@ -62,17 +58,17 @@
     - role: mail
       tags:
         - mail
-      when: "mailserver" in group_names
+      when: '"mailserver" in group_names'
 
     - role: caddy
       tags:
         - caddy
-      when: "caddy" in group_names
+      when: '"caddy" in group_names'
 
     - role: haproxy
       tags:
         - haproxy
-      when: "haproxy" in group_names
+      when: '"haproxy" in group_names'
 
     - role: dotfiles
       tags:
@@ -85,9 +81,13 @@
     - role: website
       tags:
         - website
-      when: "website" in group_names
+      when: '"website" in group_names'
 
     - role: containers
       tags:
         - containers
-      when: "fleet" in group_names
+      when: '"fleet" in group_names'
+
+    - role: dotfiles
+      tags:
+        - dotfiles

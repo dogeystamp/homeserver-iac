@@ -7,4 +7,4 @@ local_subnet: 192.168.0.0/24
 
 sshd_port: 2500
 
-bastion_ip: "{{ host_vars[groups['bastion'][0]]['local_ip'] }}"
+bastion_ip: "{{ hostvars[groups['bastion'][0]]['local_ip'] }}"

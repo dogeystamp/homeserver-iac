@@ -1,5 +1,7 @@
 ## installation steps
 
+- Install required packages:
+    - sshpass
 - Copy `inventory.example.yml` to `inventory.yml`, modifying fields as adequate.
 - Look at `group_vars/all/vars.yml`, and set needed settings in `host_vars/<hostname>/vars.yml`.
 - Look at the following roles, and for each of them override their `defaults/vars.yml` in host or group vars:
@@ -23,4 +25,13 @@
     dd if=/dev/random of=roles/filesystems/files/host1.secret bs=1024 count=2
     ansible-vault encrypt roles/filesystems/files/host1.secret
     # repeat the above for every host with encrypted external storage
+    ```
+
+- Start avahi-daemon (install `avahi` if not installed):
+    ```
+    systemctl start avahi-daemon
+    ```
+- Run the playbook:
+    ```
+    ansible-playbook run.yml --ask-vault-pass
     ```

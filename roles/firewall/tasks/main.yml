@@ -10,12 +10,12 @@
 - name: Set default sources (bastion server)
   set_fact:
     default_firewall_src: any
-  when: "bastion" in group_names
+  when: '"bastion" in group_names'
 
 - name: Set default sources (fleet server)
   set_fact:
     default_firewall_src: "{{ bastion_ip }}"
-  when: "fleet" in group_names
+  when: '"fleet" in group_names'
 
 - name: Allow service ports
   community.general.ufw:
@@ -24,7 +24,7 @@
     proto: "{{ item.proto | default('tcp') }}"
     state: "{{ 'enabled' if item.name in group_names else 'disabled' }}"
     src: "{{ item.src | default(default_firewall_src) }}"
-  with_item:
+  with_items:
     # matrix ports
     - name: "synapse"
       port: 8448

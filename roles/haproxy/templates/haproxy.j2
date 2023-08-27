@@ -16,7 +16,7 @@ listen gitea_ssh
 	tcp-check expect rstring SSH-2.0-OpenSSH.*
 
 {% for host in groups["gitea"] %}
-	server {{ host }} {{ host_vars[host]["local_ip"] }}:2499
+	server {{ host }} {{ hostvars[host]["local_ip"] }}:2499
 {% endfor %}
 
 {% endif %}
