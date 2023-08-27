@@ -8,4 +8,4 @@ local_ip: null
 subnet_prefix: /24
 local_subnet: 192.168.0.0/24
 # router IP address
-gateway: null
+gateway: 192.168.0.1
