@@ -15,9 +15,16 @@
 
 - name: Generate docker-compose.yml
   template:
-    src: "docker-compose.yml"
+    src: "docker-compose.yml.j2"
     dest: "{{ docker_compose_dir }}/docker-compose.yml"
 
-- name: Docker compose up
-  community.docker.docker_compose:
-    project_src: "{{ docker_compose_dir }}"
+- name: Create systemd unit file
+  template:
+    src: "docker-compose.service.j2"
+    dest: "/etc/systemd/system/docker-compose.service"
+
+- name: Compose up
+  systemd:
+    name: docker-compose
+    state: started
+    enabled: true

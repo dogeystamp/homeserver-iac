@@ -3,4 +3,4 @@
 # these are defaults
 # change these in group/host vars
 
-docker_compose_dir: "/home/{{ ansible_user }}/services"
+docker_compose_dir: "/opts/services"
