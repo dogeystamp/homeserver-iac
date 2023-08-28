@@ -6,6 +6,11 @@
       - docker
       - docker-compose
 
+- name: Create docker user
+  user:
+    name: docker
+    group: docker
+
 - name: Create docker-compose directory
   ansible.builtin.file:
     path: "{{ docker_compose_dir }}"
@@ -17,6 +22,7 @@
   template:
     src: "docker-compose.yml.j2"
     dest: "{{ docker_compose_dir }}/docker-compose.yml"
+  register: docker-comp
 
 - name: Create systemd unit file
   template:
@@ -26,5 +32,12 @@
 - name: Compose up
   systemd:
     name: docker-compose
-    state: started
+    state: "{{ 'restarted' if docker-comp.changed else 'started' }}"
     enabled: true
+
+# for some reason port mappings don't work without this?
+- name: Restart docker for good measure
+  systemd:
+    name: docker
+    state: restarted
+  when: docker-comp.changed
