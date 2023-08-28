@@ -3,26 +3,23 @@
 
 version: "3"
 
-networks:
-  gitea:
-    external: false
-
 services:
 {% if "gitea" in group_names %}
   gitea:
+    network_mode: host
     container_name: gitea
     image: gitea/gitea:latest
     environment:
       - USER=gitea
+      - GITEA__server__SSH_PORT=2499
+      - GITEA__server__SSH_LISTEN_PORT=2499
+      - GITEA__service__DISABLE_REGISTRATION=true
+      - GITEA__server__DOMAIN={{ gitea_domain }}
+      - GITEA__server__SSH_DOMAIN={{ gitea_domain }}
     restart: unless-stopped
-    networks:
-      - gitea
     volumes:
       - {{ dataroot }}/gitea:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-    ports:
-      - "3000:3000"
-      - "2499:22"
 
 {% endif %}

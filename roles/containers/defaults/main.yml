@@ -4,3 +4,5 @@
 # change these in group/host vars
 
 docker_compose_dir: "/opt/services"
+
+gitea_domain: "git.{{ domain }}"

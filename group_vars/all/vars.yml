@@ -13,7 +13,7 @@ backup_disk: no
 
 # where data goes
 # if you have external_disk on, you should probably set this to a path there
-dataroot: /var/www/data
+dataroot: /var/lib/serv_data
 
 # send dynamic DNS update for this domain
 dyndns_domain: null

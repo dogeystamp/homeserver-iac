@@ -22,22 +22,16 @@
   template:
     src: "docker-compose.yml.j2"
     dest: "{{ docker_compose_dir }}/docker-compose.yml"
-  register: docker-comp
+  register: generateComp
 
 - name: Create systemd unit file
   template:
     src: "docker-compose.service.j2"
     dest: "/etc/systemd/system/docker-compose.service"
 
-- name: Compose up
+- name: Compose up (update images if necessary)
   systemd:
     name: docker-compose
-    state: "{{ 'restarted' if docker-comp.changed else 'started' }}"
+    state: reloaded
     enabled: true
-
-# for some reason port mappings don't work without this?
-- name: Restart docker for good measure
-  systemd:
-    name: docker
-    state: restarted
-  when: docker-comp.changed
+  register: compUp
