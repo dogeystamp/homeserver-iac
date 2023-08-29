@@ -5,3 +5,5 @@
 
 # web root directory
 website_path: /srv/http
+
+gitea_domain: "git.{{ domain }}"

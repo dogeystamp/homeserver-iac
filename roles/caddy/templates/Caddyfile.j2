@@ -4,3 +4,9 @@ www.{{ domain }} {
 	file_server
 }
 {% endif %}
+
+{% if groups["gitea"] %}
+{{ gitea_domain }} {
+	reverse_proxy {{ groups["gitea"][0] }}:3000
+}
+{% endif %}
