@@ -11,6 +11,8 @@ services:
     image: gitea/gitea:latest
     environment:
       - USER=gitea
+      - USER_UID={{ user_gitea.uid }}
+      - USER_GID={{ user_gitea.group }}
       - GITEA__server__SSH_PORT=2499
       - GITEA__server__SSH_LISTEN_PORT=2499
       - GITEA__service__DISABLE_REGISTRATION=true

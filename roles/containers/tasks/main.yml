@@ -11,6 +11,12 @@
     name: docker
     group: docker
 
+- name: Create Gitea user
+  user:
+    name: gitea
+  register: user_gitea
+  when: '"gitea" in groups'
+
 - name: Create docker-compose directory
   ansible.builtin.file:
     path: "{{ docker_compose_dir }}"
