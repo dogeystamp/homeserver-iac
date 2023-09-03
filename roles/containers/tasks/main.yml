@@ -17,6 +17,19 @@
   register: user_gitea
   when: '"gitea" in groups'
 
+- name: Create Syncthing group
+  group:
+    name: vault
+    state: present
+  when: '"syncthing" in groups'
+
+- name: Create Syncthing user
+  user:
+    name: syncthing
+    group: vault
+  register: user_syncthing
+  when: '"syncthing" in groups'
+
 - name: Create docker-compose directory
   ansible.builtin.file:
     path: "{{ docker_compose_dir }}"
