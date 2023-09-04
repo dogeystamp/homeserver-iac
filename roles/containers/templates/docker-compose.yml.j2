@@ -3,6 +3,10 @@
 
 version: "3"
 
+networks:
+  gitea:
+    driver: bridge
+
 services:
 {% if "gitea" in group_names %}
   gitea:
@@ -22,5 +26,7 @@ services:
       - {{ dataroot }}/gitea:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+    networks:
+      - gitea
 
 {% endif %}
