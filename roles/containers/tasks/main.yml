@@ -30,6 +30,29 @@
   register: user_syncthing
   when: '"syncthing" in groups'
 
+- name: Create Syncthing vault directory
+  file:
+    path: "{{ vault_path }}"
+    state: directory
+    owner: syncthing
+    group: vault
+    mode: "u=rwX,g=rwX,o="
+
+- name: Create Syncthing config directory
+  file:
+    path: "{{ syncthing_conf_dir }}"
+    state: directory
+    owner: syncthing
+    group: vault
+    mode: "u=rwX,g=,o="
+
+- name: Add unpriviledged user to file management group
+  user:
+    name: "{{ username }}"
+    append: yes
+    groups: vault
+  when: '"syncthing" in groups'
+
 - name: Create docker-compose directory
   ansible.builtin.file:
     path: "{{ docker_compose_dir }}"

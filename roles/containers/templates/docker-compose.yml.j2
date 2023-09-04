@@ -30,3 +30,18 @@ services:
       - gitea
 
 {% endif %}
+{% if "syncthing" in group_names %}
+  syncthing:
+    network_mode: host
+    container_name: syncthing
+    image: syncthing/syncthing
+    environment:
+      - PUID={{ user_syncthing.uid }}
+      - PGID={{ user_syncthing.group }}
+    restart: unless-stopped
+    volumes:
+      - {{ vault_path }}/:/vault
+      - {{ archive_path }}/:/vault_a
+      - {{ syncthing_conf_dir }}/:/var/syncthing/config
+
+{% endif %}

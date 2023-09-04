@@ -1,0 +1,113 @@
+- name: Install packages for syncthing
+  community.general.pacman:
+    name:
+      - python-lxml
+    state: present
+
+- name: Wait for configuration file to be created
+  wait_for:
+    path: "{{ syncthing_conf_dir }}/config.xml"
+
+- name: Configure globalannounce
+  xml:
+    file: "{{ syncthing_conf_dir }}/config.xml"
+    xpath: "/configuration/options/globalAnnounceEnabled"
+    value: "{{ syncthing_globalannounce | lower}}"
+  notify:
+    - Restart syncthing
+
+- name: Configure localannounce
+  xml:
+    file: "{{ syncthing_conf_dir }}/config.xml"
+    xpath: "/configuration/options/localAnnounceEnabled"
+    value: "{{ syncthing_localannounce | lower}}"
+  notify:
+    - Restart syncthing
+
+- name: Configure listen address
+  xml:
+    file: "{{ syncthing_conf_dir }}/config.xml"
+    xpath: "/configuration/options/listenAddress"
+    value: "{{ syncthing_listen }}"
+  notify:
+    - Restart syncthing
+
+- name: Configure gui address
+  xml:
+    file: "{{ syncthing_conf_dir }}/config.xml"
+    xpath: "/configuration/gui/address"
+    value: "{{ syncthing_guiaddress }}"
+  notify:
+    - Restart syncthing
+
+- name: Configure gui user
+  xml:
+    file: "{{ syncthing_conf_dir }}/config.xml"
+    xpath: "/configuration/gui/user"
+    value: "{{ syncthing_gui_user }}"
+  notify:
+    - Restart syncthing
+
+- name: Configure gui password
+  xml:
+    file: "{{ syncthing_conf_dir }}/config.xml"
+    xpath: "/configuration/gui/password"
+    value: "{{ syncthing_gui_pass | password_hash('bcrypt', syncthing_gui_salt) }}"
+  notify:
+    - Restart syncthing
+
+- name: Warn if gui password is empty
+  fail:
+    msg: "Syncthing has no configured password!"
+  when: syncthing_gui_pass is not defined or syncthing_gui_pass == ''
+
+- name: Get API key
+  xml:
+    file: "{{ syncthing_conf_dir }}/config.xml"
+    xpath: "/configuration/gui/apikey"
+    content: text
+  register: api_key
+
+- meta: flush_handlers
+
+- name: Wait for Syncthing API port
+  wait_for:
+    port: 8384
+
+- name: Delete default Syncthing folder
+  uri:
+    url: "http://{{ syncthing_guiaddress }}/rest/config/folders/default"
+    method: DELETE
+    return_content: yes
+    headers:
+      X-API-Key: "{{ api_key.matches[0].apikey }}"
+
+- name: Add known syncthing devices
+  uri:
+    url: "http://{{ syncthing_guiaddress }}/rest/config/devices"
+    method: PUT
+    return_content: yes
+    body_format: json
+    headers:
+      X-API-Key: "{{ api_key.matches[0].apikey }}"
+    body: "{{ syncthing_devices }}"
+
+- name: Set default folder settings
+  uri:
+    url: "http://{{ syncthing_guiaddress }}/rest/config/defaults/folder"
+    method: PATCH
+    return_content: yes
+    body_format: json
+    body: "{{ syncthing_defaults.folder }}"
+    headers:
+      X-API-Key: "{{ api_key.matches[0].apikey }}"
+
+- name: Add syncthing folders
+  uri:
+    url: "http://{{ syncthing_guiaddress }}/rest/config/folders"
+    method: PUT
+    return_content: yes
+    body_format: json
+    headers:
+      X-API-Key: "{{ api_key.matches[0].apikey }}"
+    body: "{{ syncthing_folders }}"

@@ -88,6 +88,11 @@
         - containers
       when: '"fleet" in group_names'
 
+    - role: syncthing
+      tags:
+        - syncthing
+      when: '"syncthing" in group_names'
+
     - role: dotfiles
       tags:
         - dotfiles

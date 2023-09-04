@@ -1,0 +1,5 @@
+- name: Restart syncthing
+  shell:
+    chdir: "{{ docker_compose_dir }}"
+    cmd: "docker compose restart syncthing"
+  become_user: docker

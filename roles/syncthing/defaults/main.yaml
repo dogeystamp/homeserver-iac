@@ -1,0 +1,52 @@
+---
+# these are defaults
+# change these in group/host vars
+
+docker_compose_dir: "/opt/services"
+
+syncthing_localannounce: true
+syncthing_globalannounce: true
+
+# don't edit 8384 it's hardcoded
+syncthing_guiaddress: 127.0.0.1:8384
+syncthing_listen: tcp://0.0.0.0:22000
+syncthing_gui_user: syncthing
+
+# Paths for Syncthing folders
+vault_path: "{{ dataroot }}/syncthing/vault"
+archive_path: "{{ dataroot }}/syncthing/vault_a"
+syncthing_conf_dir: "{{ dataroot }}/syncthing/config"
+
+# Put this in the vault in cleartext: the playbook hashes it
+syncthing_gui_pass: ""
+
+# 22 chars for bcrypt
+syncthing_gui_salt: "{{ lookup('password', '/dev/null chars=ascii_letters,digit length=22', seed=inventory_hostname) }}"
+
+# Follows conventions of Syncthing's REST API: see https://docs.syncthing.net/dev/rest.html
+# But write in YAML.
+syncthing_devices: []
+#  - name: "Example Device"
+#    deviceID: "AAAAAAA-AAAAAAA-AAAAAAA-AAAAAAA-AAAAAAA-AAAAAAA-AAAAAAA-AAAAAAA"
+#  - name: "Main Device"
+#    deviceID: "BBBBBBB-BBBBBBB-BBBBBBB-BBBBBBB-BBBBBBB-BBBBBBB-BBBBBBB-BBBBBBB"
+#    introducer: true
+
+# Also follows REST API convention
+syncthing_folders: []
+#  - label: "Example Folder"
+#    id: "example"
+#    path: "/vault/example/"
+
+# Settings to add to all folders if not specified otherwise
+# Separated into default folder settings, and default device settings
+# Follows REST API convention
+syncthing_defaults:
+  folder:
+    devices: "{{ syncthing_devices }}"
+    versioning:
+      type: "staggered"
+      params:
+        cleanoutDays: "60"
+        maxAge: "31536000"
+  device: {}

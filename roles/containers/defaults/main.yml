@@ -6,3 +6,8 @@
 docker_compose_dir: "/opt/services"
 
 gitea_domain: "git.{{ domain }}"
+
+# Paths for Syncthing folders
+vault_path: "{{ dataroot }}/syncthing/vault"
+archive_path: "{{ dataroot }}/syncthing/vault_a"
+syncthing_conf_dir: "{{ dataroot }}/syncthing/config"
