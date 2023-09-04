@@ -9,6 +9,14 @@
   template:
     src: Caddyfile.j2
     dest: /etc/caddy/Caddyfile
+    lstrip_blocks: true
+  register: caddy_config
+
+- name: Restart Caddy service
+  service:
+    name: caddy
+    state: restarted
+  when: caddy_config.changed
 
 - name: Enable Caddy service
   service:
