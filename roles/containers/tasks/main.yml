@@ -17,6 +17,23 @@
   register: user_gitea
   when: '"gitea" in groups'
 
+- name: Create Navidrome user
+  user:
+    name: navidrome
+  register: user_navidrome
+  when: '"navidrome" in groups'
+
+- name: Create Navidrome directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: navidrome
+    group: navidrome
+    mode: "u=rwX,g=rwX,o="
+  with_items:
+    - "{{ music_path }}"
+    - "{{ dataroot }}/navidrome"
+
 - name: Create Syncthing group
   group:
     name: vault

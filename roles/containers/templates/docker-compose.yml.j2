@@ -6,6 +6,8 @@ version: "3"
 networks:
   gitea:
     driver: bridge
+  navidrome:
+    driver: bridge
 
 services:
 {% if "gitea" in group_names %}
@@ -43,5 +45,22 @@ services:
       - {{ vault_path }}/:/vault
       - {{ archive_path }}/:/vault_a
       - {{ syncthing_conf_dir }}/:/var/syncthing/config
+
+{% endif %}
+{% if "navidrome" in group_names %}
+  navidrome:
+    container_name: navidrome
+    image: deluan/navidrome:latest
+    user: {{ user_navidrome.uid }}:{{ user_navidrome.group }}
+    environment:
+      ND_LISTENBRAINZ_ENABLED: true
+    restart: unless-stopped
+    volumes:
+      - "{{ dataroot }}/navidrome:/data"
+      - "{{ music_path }}/:/music:ro"
+    networks:
+      - navidrome
+    ports:
+      - "4533:4533"
 
 {% endif %}

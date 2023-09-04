@@ -11,3 +11,8 @@ gitea_domain: "git.{{ domain }}"
 vault_path: "{{ dataroot }}/syncthing/vault"
 archive_path: "{{ dataroot }}/syncthing/vault_a"
 syncthing_conf_dir: "{{ dataroot }}/syncthing/config"
+
+# navidrome (music) path
+music_path: "{{ dataroot }}/music"
+
+navidrome_domain: "mus.{{ domain }}"

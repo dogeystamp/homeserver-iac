@@ -16,3 +16,9 @@ http://{{ gitea_domain }} {
 	reverse_proxy {{ groups["gitea"][0] }}:3000
 }
 {% endif %}
+
+{% if groups["navidrome"] | length > 0 %}
+http://{{ navidrome_domain }} {
+	reverse_proxy {{ groups["navidrome"][0] }}:4533
+}
+{% endif %}
