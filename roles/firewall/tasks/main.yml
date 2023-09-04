@@ -63,7 +63,7 @@
 
 - name: Deny all ports by default
   community.general.ufw:
-    enabled: true
+    state: enabled
 
 - name: Enable firewall service
   service:
