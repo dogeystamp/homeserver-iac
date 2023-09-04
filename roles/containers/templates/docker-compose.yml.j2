@@ -16,7 +16,7 @@ services:
       - GITEA__server__SSH_DOMAIN={{ gitea_domain }}
     ports:
       - "3000:3000"
-      - "2499:22"
+      - "2498:22"
     restart: unless-stopped
     volumes:
       - {{ dataroot }}/gitea:/data

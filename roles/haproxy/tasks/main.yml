@@ -9,6 +9,7 @@
   template:
     src: haproxy.cfg.j2
     dest: /etc/haproxy/haproxy.cfg
+    lstrip_blocks: true
 
 - name: Enable haproxy service
   systemd:
