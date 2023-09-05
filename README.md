@@ -8,8 +8,12 @@
     - `networking/connection`
     - `networking/ddclient`
     - `networking/nameserver`
+    - `caddy`
+    - `containers`
     - `filesystems`
     - `firewall`
+    - `syncthing`
+    - `website`
 - Create vault for secrets:
     ```
     ansible-vault create host_vars/[hostname]/vault.yml

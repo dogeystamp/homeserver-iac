@@ -47,13 +47,16 @@
   register: user_syncthing
   when: '"syncthing" in groups'
 
-- name: Create Syncthing vault directory
+- name: Create Syncthing vault directories
   file:
-    path: "{{ vault_path }}"
+    path: "{{ item }}"
     state: directory
     owner: syncthing
     group: vault
     mode: "u=rwX,g=rwX,o="
+  with_items:
+    - "{{ vault_path }}"
+    - "{{ archive_path }}"
 
 - name: Create Syncthing config directory
   file:
