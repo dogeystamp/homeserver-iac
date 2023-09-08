@@ -83,6 +83,11 @@
         - website
       when: '"website" in group_names'
 
+    - role: synapse
+      tags:
+        - synapse
+      when: '"synapse" in group_names'
+
     - role: containers
       tags:
         - containers

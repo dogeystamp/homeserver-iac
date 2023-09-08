@@ -80,6 +80,12 @@
     group: "{{ admin_username }}"
     state: directory
 
+- name: Create Synapse user
+  user:
+    name: synapse
+  register: user_synapse
+  when: '"synapse" in groups'
+
 - name: Generate docker-compose.yml
   template:
     src: "docker-compose.yml.j2"

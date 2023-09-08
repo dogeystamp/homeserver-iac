@@ -64,3 +64,22 @@ services:
       - "4533:4533"
 
 {% endif %}
+{% if "synapse" in group_names %}
+  synapse:
+    container_name: synapse
+    image: matrixdotorg/synapse:latest
+    user: {{ user_synapse.uid }}:{{ user_synapse.group }}
+    environment:
+      SYNAPSE_CONFIG_PATH=/data/homeserver.yaml
+    restart: unless-stopped
+    volumes:
+      - "{{ dataroot }}/synapse/uploads:/data/uploads"
+      - "{{ dataroot }}/synapse/media:/data/media"
+      - "{{ dataroot }}/synapse/data:/data"
+    networks:
+      - navidrome
+    ports:
+      - "8448:8448/tcp"
+      - "8008:8008/tcp"
+
+{% endif %}

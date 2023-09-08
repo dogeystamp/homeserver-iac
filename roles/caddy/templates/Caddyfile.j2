@@ -22,3 +22,13 @@ http://{{ navidrome_domain }} {
 	reverse_proxy {{ groups["navidrome"][0] }}:4533
 }
 {% endif %}
+
+{% if groups["synapse"] | length > 0 %}
+http://{{ synapse_domain }} {
+	reverse_proxy /_matrix/* {{ groups["synapse"][0] }}:8008
+	reverse_proxy /_synapse/client/* {{ groups["synapse"][0] }}:8008
+}
+{{ synapse_domain }}:8448 {
+	reverse_proxy /_matrix/* {{ groups["synapse"][0] }}:8008
+}
+{% endif %}

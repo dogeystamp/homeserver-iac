@@ -1,0 +1,34 @@
+# https://matrix-org.github.io/synapse/latest/usage/configuration/config_documentation.html
+
+server_name: "{{ matrix_domain }}"
+pid_file: /data/homeserver.pid
+
+listeners:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+    resources:
+      - names: [client, federation]
+        compress: false
+
+database:
+  name: sqlite3
+  args:
+    database: /data/homeserver.db
+
+log_config: "/data/log.config"
+media_store_path: /data/media_store
+
+report_stats: false
+
+registration_shared_secret: "{{ registration_shared_secret }}"
+macaroon_secret_key: "{{ macaroon_secret_key }}"
+form_secret: "{{ form_secret }}"
+
+signing_key_path: "/data/signing.key"
+trusted_key_servers:
+  - server_name: "privacytools.io"
+
+
+# vim:ft=yaml

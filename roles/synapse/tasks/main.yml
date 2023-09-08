@@ -1,0 +1,30 @@
+---
+
+- name: Create Synapse user
+  user:
+    name: synapse
+  when: '"synapse" in groups'
+
+- name: Create Synapse directories
+  file:
+    path: "{{ item }}"
+    owner: synapse
+    group: synapse
+    state: directory
+    mode: "u=rwX,g=,o="
+  with_items:
+    - "{{ dataroot }}/synapse/data"
+    - "{{ dataroot }}/synapse/uploads"
+    - "{{ dataroot }}/synapse/media"
+
+- name: Deploy Synapse config
+  template:
+    src: homeserver.yaml.j2
+    dest: "{{ dataroot }}/synapse/data/homeserver.yaml"
+    lstrip_blocks: yes
+
+- name: Deploy Synapse logging config
+  template:
+    src: homeserver.yaml.j2
+    dest: "{{ dataroot }}/synapse/data/log.config"
+    lstrip_blocks: yes

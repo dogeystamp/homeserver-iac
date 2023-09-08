@@ -1,0 +1,5 @@
+---
+# these are defaults
+# change them in host/group vars
+
+matrix_domain: "m.{{ domain }}"

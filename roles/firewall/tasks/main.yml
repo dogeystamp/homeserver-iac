@@ -26,7 +26,7 @@
   when: item.name in group_names
   with_items:
     # matrix ports
-    - name: "synapse"
+    - name: "bastion"
       port: 8448
     - name: "synapse"
       port: 8008
@@ -45,7 +45,7 @@
       src: "{{ 'any' if 'bastion' in group_names else local_subnet }}"
 
     # gitea sshd
-    - name: "gitea"
+    - name: "bastion"
       port: 2499
     # gitea http
     - name: "gitea"
