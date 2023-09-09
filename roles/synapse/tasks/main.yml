@@ -14,8 +14,7 @@
     mode: "u=rwX,g=,o="
   with_items:
     - "{{ dataroot }}/synapse/data"
-    - "{{ dataroot }}/synapse/uploads"
-    - "{{ dataroot }}/synapse/media"
+    - "{{ dataroot }}/synapse/media_store"
 
 - name: Deploy Synapse config
   template:
@@ -25,6 +24,6 @@
 
 - name: Deploy Synapse logging config
   template:
-    src: homeserver.yaml.j2
+    src: log.config.j2
     dest: "{{ dataroot }}/synapse/data/log.config"
     lstrip_blocks: yes

@@ -70,16 +70,14 @@ services:
     image: matrixdotorg/synapse:latest
     user: {{ user_synapse.uid }}:{{ user_synapse.group }}
     environment:
-      SYNAPSE_CONFIG_PATH=/data/homeserver.yaml
+      SYNAPSE_CONFIG_PATH: /data/homeserver.yaml
     restart: unless-stopped
     volumes:
-      - "{{ dataroot }}/synapse/uploads:/data/uploads"
-      - "{{ dataroot }}/synapse/media:/data/media"
+      - "{{ dataroot }}/synapse/media_store:/data/media_store"
       - "{{ dataroot }}/synapse/data:/data"
     networks:
       - navidrome
     ports:
-      - "8448:8448/tcp"
       - "8008:8008/tcp"
 
 {% endif %}
