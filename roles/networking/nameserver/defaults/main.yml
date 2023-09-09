@@ -3,5 +3,5 @@
 # these are defaults
 # set these in host/group vars
 
-email: dogeystamp@disroot.org
+email: null
 dyndns_domain: null

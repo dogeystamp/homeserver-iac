@@ -1,3 +1,5 @@
 *.secret
 host_vars
 inventory.yml
+group_vars/all/overlay.yml
+group_vars/all/vault.yml
