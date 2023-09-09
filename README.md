@@ -31,10 +31,6 @@
     # repeat the above for every host with encrypted external storage
     ```
 
-- Start avahi-daemon (install `avahi` if not installed):
-    ```
-    systemctl start avahi-daemon
-    ```
 - Run the playbook:
     ```
     ansible-playbook run.yml --ask-vault-pass
