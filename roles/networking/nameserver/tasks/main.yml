@@ -12,7 +12,7 @@
 - name: Add nameserver zone
   template:
     src: local_zone.j2
-    dest: "/var/named/{{ domain }}"
+    dest: "/var/named/{{ dyndns_domain }}"
   notify: Restart nameserver
 
 - name: Enable nameserver

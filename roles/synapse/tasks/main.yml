@@ -16,6 +16,21 @@
     - "{{ dataroot }}/synapse/data"
     - "{{ dataroot }}/synapse/media_store"
 
+- name: Ensure that form secret exists
+  fail:
+    msg: Missing form_secret; have you configured vault.yml?
+  when: form_secret == ""
+
+- name: Ensure that macaroon secret exists
+  fail:
+    msg: Missing macaroon_secret; have you configured vault.yml?
+  when: form_secret == ""
+
+- name: Ensure that registration secret exists
+  fail:
+    msg: Missing registration_secret; have you configured vault.yml?
+  when: registration_shared_secret == ""
+
 - name: Deploy Synapse config
   template:
     src: homeserver.yaml.j2

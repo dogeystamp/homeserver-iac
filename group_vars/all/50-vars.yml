@@ -28,6 +28,9 @@ enable_ddclient: false
 domain: null
 # domain: dogeystamp.com
 
+# local dns forwards here
+dns_forward: 1.1.1.1
+
 # clone dotfiles and stuff
 enable_dotfiles: yes
 

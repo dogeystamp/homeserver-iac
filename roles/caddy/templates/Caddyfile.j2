@@ -4,27 +4,33 @@
 	{% endif %}
 }
 
+{% if dyndns_domain != domain %}
+{{ dyndns_domain }} {
+	redir https://www.{{ domain }} 302
+}
+{% endif %}
+
 {% if "website" in group_names %}
-http://www.{{ domain }} {
+www.{{ domain }} {
 	root * {{ website_path }}
 	file_server
 }
 {% endif %}
 
 {% if groups["gitea"] | length > 0 %}
-http://{{ gitea_domain }} {
+{{ gitea_domain }} {
 	reverse_proxy {{ groups["gitea"][0] }}:3000
 }
 {% endif %}
 
 {% if groups["navidrome"] | length > 0 %}
-http://{{ navidrome_domain }} {
+{{ navidrome_domain }} {
 	reverse_proxy {{ groups["navidrome"][0] }}:4533
 }
 {% endif %}
 
 {% if groups["synapse"] | length > 0 %}
-http://{{ matrix_domain }} {
+{{ matrix_domain }} {
 	reverse_proxy /_matrix/* {{ groups["synapse"][0] }}:8008
 	reverse_proxy /_synapse/client/* {{ groups["synapse"][0] }}:8008
 }
