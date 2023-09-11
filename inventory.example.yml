@@ -62,6 +62,10 @@ all:
       hosts:
         your_bastion_host:
         your_fleet_host:
+    mailserver:
+      hosts:
+        your_bastion_host:
+        your_fleet_host:
     website:
       hosts:
         your_bastion_host:
