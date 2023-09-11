@@ -24,3 +24,8 @@
     src: /dev/mapper/disk
     state: mounted
     fstype: ext4
+
+- name: Create data root dir
+  file:
+    path: "{{ dataroot }}"
+    state: directory

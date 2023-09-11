@@ -53,8 +53,3 @@
     name: cronie
     state: started
     enabled: yes
-
-- name: Create data root dir
-  file:
-    path: "{{ dataroot }}"
-    state: directory
