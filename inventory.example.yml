@@ -5,8 +5,7 @@
 # Set fallback_host using `nmap 192.168.0.0/24 -p 22` to find the dynamic IP of your Pi
 # local_ip is used after first setup.
 
-# Make sure to make entries in your .ssh/config for each hostname
-# Otherwise Ansible doesn't know how to resolve them
+# Make entries in your .ssh/config for ease of use
 # Example:
 #
 #   Host your_fleet_host

@@ -35,6 +35,12 @@ The intended topology is a bastion host facing the Internet, with reverse proxie
 - Copy `inventory.example.yml` to `inventory.yml`.
 - Write down the machines' DHCP addresses inside `inventory.yml` under the `fallback_host` field.
 - Assign static LAN IP addresses for your machines in the inventory.
+- Create ssh keys for all your hosts:
+    ```
+    mkdir -p ~/.ssh/keys
+    ssh-keygen -t ed25519 -f ~/.ssh/keys/your_host_name
+    ```
+    It is important for the hostnames to match your inventory hostnames.
 
 - Set up your domain name and networks.
     - Forward all needed ports to your bastion host's static IP.
