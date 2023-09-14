@@ -35,10 +35,14 @@
   template:
     src: homeserver.yaml.j2
     dest: "{{ dataroot }}/synapse/data/homeserver.yaml"
+    owner: synapse
+    group: synapse
     lstrip_blocks: yes
 
 - name: Deploy Synapse logging config
   template:
     src: log.config.j2
     dest: "{{ dataroot }}/synapse/data/log.config"
+    owner: synapse
+    group: synapse
     lstrip_blocks: yes
