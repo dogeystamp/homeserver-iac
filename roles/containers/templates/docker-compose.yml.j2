@@ -46,6 +46,7 @@ services:
       - {{ vault_path }}/:/vault
       - {{ archive_path }}/:/vault_a
       - {{ syncthing_conf_dir }}/:/var/syncthing/config
+      - "{{ music_path }}:/music"
 
 {% endif %}
 {% if "navidrome" in group_names %}
