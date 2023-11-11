@@ -4,7 +4,8 @@ mail=root
 mail-failure=root
 pid=/var/run/ddclient.pid
 protocol=dyndns2
-use=web, web=https://ip.me
+usev4=webv4
+webv4=https://ipv4.nsupdate.info/myip
 ssl=yes  # yes = use https for updates
 server=ipv4.nsupdate.info
 login={{ dyndns_domain }}
