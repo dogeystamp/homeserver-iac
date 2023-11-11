@@ -48,6 +48,10 @@
     state: present
     key: "{{ lookup('file', '~/.ssh/keys/{{ inventory_hostname }}.pub')}}"
 
+- name: Set timezone
+  timezone:
+    name: "{{ timezone }}"
+
 - name: Enable cron daemon
   service:
     name: cronie
