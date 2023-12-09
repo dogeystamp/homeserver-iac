@@ -52,7 +52,7 @@ services:
 {% if "navidrome" in group_names %}
   navidrome:
     container_name: navidrome
-    image: deluan/navidrome:latest
+    image: ghcr.io/navidrome/navidrome:latest
     user: {{ user_navidrome.uid }}:{{ user_navidrome.group }}
     environment:
       ND_LISTENBRAINZ_ENABLED: true
