@@ -45,6 +45,9 @@ all:
         navidrome:
           hosts:
             your_fleet_host:
+        paperless:
+          hosts:
+            your_fleet_host:
     bastion:
       children:
         ddclient:

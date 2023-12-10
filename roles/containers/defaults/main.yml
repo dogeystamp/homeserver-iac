@@ -16,3 +16,5 @@ syncthing_conf_dir: "{{ dataroot }}/syncthing/config"
 music_path: "{{ dataroot }}/music"
 
 navidrome_domain: "mus.{{ domain }}"
+
+paperless_domain: "doc.{{ domain }}"

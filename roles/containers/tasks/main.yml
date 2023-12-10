@@ -21,7 +21,6 @@
   group:
     name: vault
     state: present
-  when: '"syncthing" in groups'
 
 - name: Create Syncthing user
   user:
@@ -54,7 +53,43 @@
     name: "{{ username }}"
     append: yes
     groups: vault
-  when: '"syncthing" in groups'
+
+- name: Create Paperless group
+  group:
+    name: paperless
+    state: present
+  register: group_paperless
+
+- name: Create Paperless user
+  user:
+    name: paperless
+    group: paperless
+  register: user_paperless
+
+- name: Create Paperless directories
+  file:
+    path: "{{ dataroot }}/paperless/{{ item }}"
+    state: directory
+    owner: paperless
+    group: paperless
+    mode: "u=rwX,g=,o="
+  with_items:
+    - data
+    - media
+
+- name: Create Paperless consume directory
+  file:
+    path: "{{ dataroot }}/paperless/consume"
+    state: directory
+    owner: paperless
+    group: paperless
+    mode: "u=rwX,g=rwX,o="
+
+- name: Create Paperless .env file
+  template:
+    src: "paperless.env.j2"
+    dest: "{{ docker_compose_dir }}/paperless.env"
+    lstrip_blocks: true
 
 - name: Create Navidrome user
   user:

@@ -47,6 +47,7 @@ services:
       - {{ archive_path }}/:/vault_a
       - {{ syncthing_conf_dir }}/:/var/syncthing/config
       - "{{ music_path }}:/music"
+      - "{{ dataroot }}/paperless/consume:/paperless"
 
 {% endif %}
 {% if "navidrome" in group_names %}
@@ -82,4 +83,52 @@ services:
     ports:
       - "8008:8008/tcp"
 
+{% endif %}
+
+{% if "paperless" in group_names %}
+  paperless-broker:
+    container_name: paperless-broker
+    image: docker.io/library/redis:7
+    restart: unless-stopped
+    volumes:
+      - redisdata:/data
+
+  paperless-web:
+    container_name: paperless-web
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    restart: unless-stopped
+    depends_on:
+      - paperless-broker
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "-S", "--max-time", "2", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - "{{ dataroot }}/paperless/data:/usr/src/paperless/data"
+      - "{{ dataroot }}/paperless/media:/usr/src/paperless/media"
+      - paperless-export:/usr/src/paperless/export
+      - "{{ dataroot }}/paperless/consume:/usr/src/paperless/consume"
+    env_file: paperless.env
+    environment:
+      USERMAP_UID: "{{ user_paperless.uid }}"
+      # it gets the vault group because otherwise syncthing can't read the consume dir
+      USERMAP_GID: "{{ user_syncthing.group }}"
+      PAPERLESS_REDIS: redis://paperless-broker:6379
+      PAPERLESS_URL: "https://{{ paperless_domain }}"
+      PAPERLESS_USE_X_FORWARD_HOST: true
+      PAPERLESS_USE_X_FORWARD_PORT: true
+      PAPERLESS_OCR_PAGES: 1
+      PAPERLESS_TASK_WORKERS: 2
+      PAPERLESS_THREADS_PER_WORKER: 2
+      PAPERLESS_WEBSERVER_WORKERS: 1
+      PAPERLESS_ENABLE_NLTK: false
+{% endif %}
+
+{% if "paperless" in group_names %}
+volumes:
+  redisdata:
+  paperless-export:
 {% endif %}

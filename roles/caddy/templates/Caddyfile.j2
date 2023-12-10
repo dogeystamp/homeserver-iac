@@ -38,3 +38,9 @@ www.{{ domain }} {
 	reverse_proxy /_matrix/* {{ groups["synapse"][0] }}:8008
 }
 {% endif %}
+
+{% if groups["paperless"] | length > 0 %}
+{{ paperless_domain }} {
+	reverse_proxy {{ groups["paperless"][0] }}:8000
+}
+{% endif %}

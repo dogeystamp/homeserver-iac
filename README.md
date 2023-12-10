@@ -9,12 +9,13 @@ This project was largely inspired by his own [infra](https://github.com/notthebe
 ## services
 
 The following services are managed completely automatically:
-- Gitea
-- Matrix Synapse
-- Syncthing
-- Navidrome
-- Exim mail (internal use only)
-- Caddy reverse proxy
+- [Gitea](https://about.gitea.com/)
+- [Matrix Synapse](https://github.com/matrix-org/synapse)
+- [Syncthing](https://syncthing.net/)
+- [Navidrome](https://www.navidrome.org/)
+- [Paperless-ngx](https://docs.paperless-ngx.com/)
+- [Exim](https://www.exim.org/) mail (internal use only)
+- [Caddy](https://caddyserver.com/) reverse proxy
 
 ## misc features
 

@@ -9,6 +9,7 @@ website_path: /srv/http
 gitea_domain: "git.{{ domain }}"
 navidrome_domain: "mus.{{ domain }}"
 matrix_domain: "m.{{ domain }}"
+paperless_domain: "doc.{{ domain }}"
 
 ## send renewal reminders to this address
 email: null
