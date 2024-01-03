@@ -3,6 +3,15 @@
 
 # static IP interface
 net_interface: eth0
+# e.g. wifi
+conn_type: ethernet
+# if you have a wireless connection already, set this to its name to use it
+conn_name: wired
+# wifi connection name
+conn_ssid: ""
+# set this in the secret template
+conn_pass: ""
+
 # LAN static IP address
 local_ip: null
 subnet_prefix: /24

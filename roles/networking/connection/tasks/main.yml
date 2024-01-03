@@ -3,6 +3,11 @@
     name:
       - networkmanager
 
+- name: Disable MAC randomization
+  template:
+    src: mac-randomization.conf.j2
+    dest: /etc/systemd/resolved.conf.d/30-mac-randomization.conf
+
 - name: Enable NetworkManager
   service:
     name: NetworkManager
@@ -68,9 +73,13 @@
     gw4: "{{ gateway }}"
     method4: manual
     state: present
-    conn_name: wired
+    conn_name: "{{ conn_name }}"
+    ssid: "{{ conn_ssid }}"
+    wifi_sec:
+      key-mgmt: wpa-psk
+      psk: "{{ conn_pass }}"
     ifname: "{{ net_interface }}"
-    type: ethernet
+    type: "{{ conn_type }}"
   register: nmcli_conf
   changed_when: false
   poll: 0
