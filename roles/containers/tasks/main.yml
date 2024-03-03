@@ -82,7 +82,7 @@
     path: "{{ dataroot }}/paperless/consume"
     state: directory
     owner: paperless
-    group: paperless
+    group: vault
     mode: "u=rwX,g=rwX,o="
 
 - name: Create Paperless .env file
