@@ -16,5 +16,8 @@ syncthing_conf_dir: "{{ dataroot }}/syncthing/config"
 music_path: "{{ dataroot }}/music"
 
 navidrome_domain: "mus.{{ domain }}"
+# enable navidrome shares (this will give permissions to all users!)
+# quotes are important
+navidrome_sharing: "false"
 
 paperless_domain: "doc.{{ domain }}"

@@ -57,6 +57,7 @@ services:
     user: {{ user_navidrome.uid }}:{{ user_navidrome.group }}
     environment:
       ND_LISTENBRAINZ_ENABLED: true
+      ND_ENABLESHARING: {{ navidrome_sharing | default("false", true) }}
     restart: unless-stopped
     volumes:
       - "{{ dataroot }}/navidrome:/data"
