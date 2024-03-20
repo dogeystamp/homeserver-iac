@@ -1,4 +1,6 @@
 # Automatically deploy dotfiles on login
 
-~/dots/dotinstall.sh > /dev/null 2>&1
+if [ ! -e ~/.config/dot_profile.example ]; then
+	~/dots/dotinstall.sh > /dev/null 2>&1
+fi
 source ~/.profile
