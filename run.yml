@@ -70,19 +70,6 @@
         - haproxy
       when: '"haproxy" in group_names'
 
-    - role: dotfiles
-      tags:
-        - dotfiles
-      when: enable_dotfiles
-      dotfile_users:
-        - "{{ ansible_user }}"
-        - "{{ username }}"
-
-    - role: website
-      tags:
-        - website
-      when: '"website" in group_names'
-
     - role: synapse
       tags:
         - synapse
@@ -98,6 +85,15 @@
         - syncthing
       when: '"syncthing" in group_names'
 
+    - role: website
+      tags:
+        - website
+      when: '"website" in group_names'
+
     - role: dotfiles
       tags:
         - dotfiles
+      when: enable_dotfiles
+      dotfile_users:
+        - "{{ ansible_user }}"
+        - "{{ username }}"
