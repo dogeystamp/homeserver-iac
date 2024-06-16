@@ -1,0 +1,57 @@
+---
+
+- name: Install wireguard packages
+  community.general.pacman:
+    name:
+      - wireguard-tools
+      # for encoding .conf as a qr code
+      - qrencode
+  notify:
+    - Start wireguard
+
+- name: Enable IP forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+    state: present
+    reload: yes
+
+- name: Setup UFW rules to accept VPN traffic
+  community.general.ufw:
+    rule: allow
+    direction: in
+    src: "{{ wireguard.ip.cidr }}"
+    dest: any
+
+- name: Deploy wireguard server config
+  template:
+    src: server.conf.j2
+    dest: "/etc/wireguard/{{ wireguard.interface }}.conf"
+    owner: root
+    group: root
+    mode: 0600
+    lstrip_blocks: true
+  no_log: true
+  notify:
+    - Start wireguard
+
+- name: Create wireguard client config output folder
+  file:
+    path: "{{ wireguard.client_folder }}"
+    owner: root
+    group: root
+    mode: 0700
+    state: directory
+
+- name: Create wireguard client configs
+  template:
+    src: client.conf.j2
+    dest: "{{ wireguard.client_folder }}/wg-{{ item.name }}.conf"
+    owner: root
+    group: root
+    mode: 0600
+    lstrip_blocks: true
+  no_log: true
+  with_items: "{{ wireguard_secret.peers }}"
+  notify:
+    - Start wireguard

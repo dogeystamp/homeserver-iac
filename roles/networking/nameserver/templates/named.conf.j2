@@ -1,6 +1,12 @@
 // vim:set ts=4 sw=4 et:
 
-acl internals { 127.0.0.0/8; {{ local_subnet }}; };
+acl internals { 
+    127.0.0.0/8;
+    {{ local_subnet }};
+    {% if wireguard is defined %}
+    {{ wireguard.ip.cidr }};
+    {% endif %}
+};
 
 options {
     directory "/var/named";

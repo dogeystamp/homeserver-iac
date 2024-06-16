@@ -1,0 +1,16 @@
+[Interface]
+# device's address in the VPN
+Address = {{ item.addr }}
+# device privkey
+PrivateKey = {{ item.priv_key }}
+DNS = {{ wireguard.ip.address }}
+
+[Peer]
+# server stuff
+PublicKey = {{ wireguard_secret.server_pub_key }}
+Endpoint = {{ wireguard.ip.server_public }}:{{ wireguard.ip.port }}
+
+# allow traffic for all subnets into the VPN
+AllowedIPs = 0.0.0.0/0
+
+PersistentKeepalive = 25

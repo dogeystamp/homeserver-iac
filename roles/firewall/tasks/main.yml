@@ -61,6 +61,11 @@
       proto: any
       src: "{{ local_subnet }}"
 
+    - name: "wireguard"
+      port: "{{ wireguard.ip.port | default('51820') }}"
+      proto: udp
+      src: any
+
 - name: Deny all ports by default
   community.general.ufw:
     state: enabled
