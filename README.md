@@ -16,6 +16,7 @@ The following services are managed completely automatically:
 - [Paperless-ngx](https://docs.paperless-ngx.com/)
 - [Exim](https://www.exim.org/) mail (internal use only)
 - [Caddy](https://caddyserver.com/) reverse proxy
+- [WireGuard](https://www.wireguard.com/) VPN server.
 
 ## misc features
 
