@@ -10,6 +10,10 @@
 }
 {% endif %}
 
+(external) {
+	@external not remote_ip {{ internal_cidr }}
+}
+
 import conf.d/*
 
 {% if "website" in group_names %}
@@ -27,6 +31,9 @@ www.{{ domain }} {
 
 {% if groups["navidrome"] | length > 0 %}
 {{ navidrome_domain }} {
+	import external
+	respond @external 403
+
 	reverse_proxy {{ groups["navidrome"][0] }}:4533
 }
 {% endif %}
@@ -43,6 +50,9 @@ www.{{ domain }} {
 
 {% if groups["paperless"] | length > 0 %}
 {{ paperless_domain }} {
+	import external
+	respond @external 403
+
 	reverse_proxy {{ groups["paperless"][0] }}:8000
 }
 {% endif %}

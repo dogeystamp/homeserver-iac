@@ -19,6 +19,11 @@ dataroot: /var/lib/serv_data
 dyndns_domain: null
 # dyndns_domain: d.nerdpol.ovh
 
+# limit this to, for example, your VPN subnet or your local subnet
+# alternatively, 0.0.0.0/0 to open up the internal services to all
+# for multiple subnets, separate with spaces
+internal_cidr: "{{ local_subnet }}"
+
 # this is set true in group_vars/bastion/vars.yml
 enable_ddclient: false
 
