@@ -1,8 +1,6 @@
 # vim: ft=yaml
 ---
 
-version: "3"
-
 networks:
   gitea:
     driver: bridge
@@ -22,8 +20,8 @@ services:
       - GITEA__server__DOMAIN={{ gitea_domain }}
       - GITEA__server__SSH_DOMAIN={{ gitea_domain }}
     ports:
-      - "3000:3000"
-      - "2498:22"
+      - "{{ docker_ip }}:3000:3000"
+      - "{{ docker_ip }}:2498:22"
     restart: unless-stopped
     volumes:
       - {{ dataroot }}/gitea:/data
@@ -65,7 +63,7 @@ services:
     networks:
       - navidrome
     ports:
-      - "4533:4533"
+      - "{{ docker_ip }}:4533:4533"
 
 {% endif %}
 {% if "synapse" in group_names %}
@@ -82,7 +80,7 @@ services:
     networks:
       - navidrome
     ports:
-      - "8008:8008/tcp"
+      - "{{ docker_ip }}:8008:8008/tcp"
 
 {% endif %}
 
@@ -101,7 +99,7 @@ services:
     depends_on:
       - paperless-broker
     ports:
-      - "8000:8000"
+      - "{{ docker_ip }}:8000:8000"
     healthcheck:
       test: ["CMD", "curl", "-fs", "-S", "--max-time", "2", "http://localhost:8000"]
       interval: 30s

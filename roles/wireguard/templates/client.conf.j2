@@ -3,14 +3,12 @@
 Address = {{ item.addr }}
 # device privkey
 PrivateKey = {{ item.priv_key }}
-DNS = {{ wireguard.ip.address }}
+DNS = {{ hostvars[groups["bastion"][0]].vpn_ip }}
 
 [Peer]
 # server stuff
-PublicKey = {{ wireguard_secret.server_pub_key }}
+PublicKey = {{ wireguard_secret.servers[groups["bastion"][0]].pub }}
 Endpoint = {{ wireguard.ip.server_public }}:{{ wireguard.ip.port }}
 
 # allow traffic for all subnets into the VPN
 AllowedIPs = 0.0.0.0/0
-
-PersistentKeepalive = 25

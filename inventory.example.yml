@@ -3,7 +3,10 @@
 
 # fallback_host is only used during setup before the static IP (local_ip) is configured.
 # Set fallback_host using `nmap 192.168.0.0/24 -p 22` to find the dynamic IP of your Pi
+#
 # local_ip is used after first setup.
+#
+# vpn_ip is used for the WireGuard network.
 
 # Make entries in your .ssh/config for ease of use
 # Example:
@@ -19,6 +22,7 @@ all:
     your_bastion_host:
       fallback_host: 192.168.0.123
       local_ip: 192.168.0.3
+      vpn_ip: 10.66.77.1
       ansible_port: 2500
       ansible_connection: ssh
       ansible_ssh_private_key_file: ~/.ssh/keys/your_bastion_host
@@ -26,6 +30,7 @@ all:
     your_fleet_host:
       fallback_host: 192.168.0.124
       local_ip: 192.168.0.86
+      vpn_ip: 10.66.77.86
       ansible_port: 2500
       ansible_connection: ssh
       ansible_ssh_private_key_file: ~/.ssh/keys/your_fleet_host
@@ -65,6 +70,7 @@ all:
     wireguard:
       hosts:
         your_bastion_host:
+        your_fleet_host:
     sshd:
       hosts:
         your_bastion_host:

@@ -32,6 +32,8 @@ The playbook assumes fresh Arch Linux ARM images installed on machines in your L
 They should start off with default credentials (i.e. `alarm:alarm`, `root:root`).
 This repo takes care of everything else.
 The intended topology is a bastion host facing the Internet, with reverse proxies forwarding traffic to a service host inside the firewall.
+The servers are all on a WireGuard network.
+This network also serves as the typical "encrypted tunnel" for devices on the go.
 
 - Flash all your machines with Arch Linux ARM.
 - Copy `inventory.example.yml` to `inventory.yml`.

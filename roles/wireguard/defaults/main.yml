@@ -11,8 +11,6 @@ wireguard:
     - "{{ dns_forward }}"
   interface: "wg0"
   ip:
-    # address for the server
-    address: "10.66.77.1/32"
     # cidr range in tunnel
     cidr: "10.66.77.0/24"
 

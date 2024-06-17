@@ -14,9 +14,10 @@
 
 - name: Set default sources (fleet server)
   set_fact:
-    default_firewall_src: "{{ bastion_ip }}"
+    default_firewall_src: "{{ bastion_vpn_ip if wireguard_services else bastion_ip }}"
   when: '"fleet" in group_names'
 
+# this is actually kind of useless because docker bypasses this
 - name: Allow service ports
   community.general.ufw:
     rule: allow

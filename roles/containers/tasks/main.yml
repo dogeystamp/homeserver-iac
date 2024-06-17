@@ -126,6 +126,10 @@
   register: user_synapse
   when: '"synapse" in groups'
 
+- name: Figure out local IP address
+  set_fact:
+    docker_ip: "{{ vpn_ip if wireguard_services else local_ip }}"
+
 - name: Generate docker-compose.yml
   template:
     src: "docker-compose.yml.j2"

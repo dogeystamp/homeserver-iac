@@ -5,5 +5,9 @@
 # Modifications will be lost!
 
 {% for host in groups["all"] %}
+{% if wireguard_services %}
+{{ hostvars[host]["vpn_ip"] }} {{ host }}
+{% else %}
 {{ hostvars[host]["local_ip"] }} {{ host }}
+{% endif %}
 {% endfor %}

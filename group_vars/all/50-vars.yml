@@ -43,3 +43,6 @@ escalation_method: doas
 
 # set up static IP
 enable_connection: yes
+
+# use a wireguard network between bastion and fleet host for the reverse proxy
+wireguard_services: true

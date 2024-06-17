@@ -15,6 +15,7 @@
     value: 1
     state: present
     reload: yes
+  when: '"bastion" in group_names'
 
 - name: Setup UFW rules to accept VPN traffic
   community.general.ufw:
@@ -22,6 +23,7 @@
     direction: in
     src: "{{ wireguard.ip.cidr }}"
     dest: any
+  when: '"bastion" in group_names'
 
 - name: Deploy wireguard server config
   template:
@@ -42,6 +44,7 @@
     group: root
     mode: 0700
     state: directory
+  when: '"bastion" in group_names'
 
 - name: Create wireguard client configs
   template:
@@ -52,6 +55,7 @@
     mode: 0600
     lstrip_blocks: true
   no_log: true
-  with_items: "{{ wireguard_secret.peers }}"
+  with_items: "{{ wireguard_secret.clients }}"
   notify:
     - Start wireguard
+  when: '"bastion" in group_names'
