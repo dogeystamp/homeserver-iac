@@ -1,7 +1,12 @@
 [Unit]
 Description=Services manager with docker-compose
+{% if wireguard_services %}
+Requires=docker.service wg-quick@{{ wireguard_interface }}.service
+After=docker.service wg-quick@{{ wireguard_interface }}.service
+{% else %}
 Requires=docker.service
 After=docker.service
+{% endif %}
 
 [Service]
 User=docker

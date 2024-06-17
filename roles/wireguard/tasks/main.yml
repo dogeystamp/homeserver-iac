@@ -28,7 +28,7 @@
 - name: Deploy wireguard server config
   template:
     src: server.conf.j2
-    dest: "/etc/wireguard/{{ wireguard.interface }}.conf"
+    dest: "/etc/wireguard/{{ wireguard_interface }}.conf"
     owner: root
     group: root
     mode: 0600

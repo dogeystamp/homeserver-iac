@@ -1,5 +1,5 @@
 [Interface]
-Address = {{ hostvars[inventory_hostname]["vpn_ip"] }}/32
+Address = {{ vpn_ip }}/32
 PrivateKey = {{ wireguard_secret.servers[inventory_hostname].priv }}
 ListenPort = {{ wireguard.ip.port }}
 
