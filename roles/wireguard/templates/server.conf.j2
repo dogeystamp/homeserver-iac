@@ -5,7 +5,7 @@ ListenPort = {{ wireguard.ip.port }}
 
 {% if "bastion" in group_names %}
 PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o {{ net_interface }} -j MASQUERADE
-PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o {{ net_interface }} -j MASQUERADE
+PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o {{ net_interface }} -j MASQUERADE
 {% endif %}
 SaveConfig = false
 
