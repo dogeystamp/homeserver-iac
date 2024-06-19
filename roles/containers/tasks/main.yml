@@ -15,7 +15,7 @@
   user:
     name: gitea
   register: user_gitea
-  when: '"gitea" in groups'
+  when: '"gitea" in group_names'
 
 - name: Create Syncthing group
   group:
@@ -27,7 +27,7 @@
     name: syncthing
     group: vault
   register: user_syncthing
-  when: '"syncthing" in groups'
+  when: '"syncthing" in group_names'
 
 - name: Create Syncthing vault directories
   file:
@@ -95,7 +95,7 @@
   user:
     name: navidrome
   register: user_navidrome
-  when: '"navidrome" in groups'
+  when: '"navidrome" in group_names'
 
 - name: Create Navidrome directory
   file:
@@ -124,7 +124,7 @@
   user:
     name: synapse
   register: user_synapse
-  when: '"synapse" in groups'
+  when: '"synapse" in group_names'
 
 - name: Figure out local IP address
   set_fact:

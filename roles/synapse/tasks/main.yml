@@ -3,7 +3,7 @@
 - name: Create Synapse user
   user:
     name: synapse
-  when: '"synapse" in groups'
+  when: '"synapse" in group_names'
 
 - name: Create Synapse directories
   file:
