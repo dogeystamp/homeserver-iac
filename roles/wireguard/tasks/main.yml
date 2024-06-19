@@ -17,6 +17,13 @@
     reload: yes
   when: '"bastion" in group_names'
 
+- name: Prevent UFW from removing IP forwarding
+  lineinfile:
+    path: /etc/ufw/sysctl.conf
+    regexp: "^net/ipv4/ip_forward="
+    line: "net/ipv4/ip_forward=1"
+  when: '"bastion" in group_names'
+
 - name: Setup UFW rules to accept VPN traffic
   community.general.ufw:
     rule: allow
