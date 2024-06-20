@@ -1,4 +1,4 @@
-# https://matrix-org.github.io/synapse/latest/usage/configuration/config_documentation.html
+# https://element-hq.github.io/synapse/latest/usage/configuration/config_documentation.html
 
 server_name: "{{ matrix_domain }}"
 pid_file: /data/homeserver.pid
@@ -11,6 +11,8 @@ listeners:
     resources:
       - names: [client, federation]
         compress: false
+
+max_upload_size: 500M
 
 database:
   name: sqlite3
