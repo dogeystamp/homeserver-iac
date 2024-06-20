@@ -17,12 +17,18 @@
     default_firewall_src: "{{ bastion_vpn_ip if wireguard_services else bastion_ip }}"
   when: '"fleet" in group_names'
 
-# this is actually kind of useless because docker bypasses this
+- name: Configure service interface
+  set_fact:
+    service_firewall_if: "{{ wireguard_interface if wireguard_services else omit }}"
+  when: 'wireguard_services'
+
 - name: Allow service ports
   community.general.ufw:
     rule: allow
     port: "{{ item.port }}"
     proto: "{{ item.proto | default('tcp') }}"
+    # service -> VPN interface if available, else default
+    interface_in: "{{ service_firewall_if if (item.interface | default('')) == 'service' else item.interface | default(omit) }}"
     src: "{{ item.src | default(default_firewall_src) }}"
   when: item.name in group_names
   with_items:
@@ -31,10 +37,12 @@
       port: 8448
     - name: "synapse"
       port: 8008
+      interface: service
 
     # navidrome api/web interface
     - name: "navidrome"
       port: 4533
+      interface: service
 
     - name: "syncthing"
       port: 22000
@@ -48,9 +56,13 @@
     # gitea sshd
     - name: "bastion"
       port: 2499
+    - name: "gitea"
+      port: 2498
+      interface: service
     # gitea http
     - name: "gitea"
       port: 3000
+      interface: service
 
     - name: "caddy"
       port: 80
@@ -67,7 +79,7 @@
       proto: udp
       src: any
 
-- name: Deny all ports by default
+- name: Enable UFW
   community.general.ufw:
     state: enabled
 

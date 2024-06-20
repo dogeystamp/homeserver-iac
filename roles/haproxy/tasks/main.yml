@@ -5,11 +5,41 @@
     name:
       - haproxy
 
-- name: Deploy haproxy config
+- name: Figure out local IP address
+  set_fact:
+    service_ip: "{{ vpn_ip if wireguard_services else local_ip }}"
+
+# for info about this, see top of roles/containers/templates/docker-compose.yml.j2
+- name: Enumerate services to forward
+  set_fact:
+    haproxy_services:
+      - name: gitea
+        ports:
+          - 2498
+          - 3000
+      - name: navidrome
+        ports:
+          - 4533
+      - name: synapse
+        ports:
+          - 8008
+      - name: paperless
+        ports:
+          - 8000
+
+- name: Deploy haproxy config (bastion)
   template:
-    src: haproxy.cfg.j2
+    src: haproxy.cfg.bastion.j2
     dest: /etc/haproxy/haproxy.cfg
     lstrip_blocks: true
+  when: '"bastion" in group_names'
+
+- name: Deploy haproxy config (fleet)
+  template:
+    src: haproxy.cfg.fleet.j2
+    dest: /etc/haproxy/haproxy.cfg
+    lstrip_blocks: true
+  when: '"fleet" in group_names'
 
 - name: Enable haproxy service
   systemd:

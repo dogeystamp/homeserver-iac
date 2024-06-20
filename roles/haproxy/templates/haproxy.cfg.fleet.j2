@@ -1,0 +1,17 @@
+defaults
+	log global
+	mode tcp
+	timeout connect 10s
+	timeout client 36h
+	timeout server 36h
+	balance leastconn
+
+{% for service in haproxy_services %}
+{% if service.name in group_names %}
+{% for port in service.ports %}
+listen {{ service.name}}{{ port }}
+	bind {{ service_ip }}:{{ port }}
+	server localhost 127.0.0.1:{{ port }}
+{% endfor %}
+{% endif %}
+{% endfor %}

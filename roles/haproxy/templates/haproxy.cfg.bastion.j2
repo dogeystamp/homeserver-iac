@@ -15,12 +15,3 @@ listen gitea_ssh
 	server {{ host }} {{ host }}:2498
 {% endfor %}
 {% endif %}
-
-
-{% if groups["syncthing"] | length > 0 and "syncthing" not in group_names %}
-listen syncthing
-	bind *:22000
-{% for host in groups["syncthing"] %}
-	server {{ host }} {{ host }}:22000
-{% endfor %}
-{% endif %}

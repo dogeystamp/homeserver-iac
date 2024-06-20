@@ -67,6 +67,7 @@ all:
     haproxy:
       hosts:
         your_bastion_host:
+        your_fleet_host:
     wireguard:
       hosts:
         your_bastion_host:
