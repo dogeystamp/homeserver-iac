@@ -57,3 +57,11 @@
     name: cronie
     state: started
     enabled: yes
+
+- name: Setup reboot cronjob
+  cron:
+    name: "Reboot system"
+    minute: 59
+    hour: 11
+    weekday: 5
+    job: "reboot"
