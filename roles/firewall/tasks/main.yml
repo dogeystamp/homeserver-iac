@@ -44,6 +44,10 @@
       port: 4533
       interface: service
 
+    - name: "paperless"
+      port: 8000
+      interface: service
+
     - name: "syncthing"
       port: 22000
       proto: any
