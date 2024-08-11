@@ -24,14 +24,6 @@
     line: "net/ipv4/ip_forward=1"
   when: '"bastion" in group_names'
 
-- name: Setup UFW rules to accept VPN traffic
-  community.general.ufw:
-    rule: allow
-    direction: in
-    src: "{{ wireguard.ip.cidr }}"
-    dest: any
-  when: '"bastion" in group_names'
-
 - name: Deploy wireguard server config
   template:
     src: server.conf.j2
