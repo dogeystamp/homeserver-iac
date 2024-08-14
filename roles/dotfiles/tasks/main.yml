@@ -1,32 +1,20 @@
-- name: Fetch dotfiles
-  git:
-    repo: "{{ dots_repo }}"
-    dest: "/srv/dots/"
-  register: dotfiles
+---
 
-- name: Remove existing dotfiles
-  file:
-    path: "/home/{{ item }}/.bashrc"
-    state: absent
-  with_items: "{{ dotfile_users }}"
-  when: dotfiles.changed
+- name: Install dotfile manager
+  community.general.pacman:
+    name:
+      - chezmoi
 
-- name: Copy dotfiles
-  copy:
-    remote_src: yes
-    src: /srv/dots/
-    dest: "/home/{{ item }}/dots/"
-    owner: "{{ item }}"
-    group: "{{ item }}"
+- name: Init dotfiles
+  shell:
+    cmd: "umask 007; chezmoi init {{ dots_repo }} --force --depth 1 --promptDefaults"
+  become: true
+  become_user: "{{ item }}"
   with_items: "{{ dotfile_users }}"
-  when: dotfiles.changed
 
-- name: Deploy dotfiles on login
-  template:
-    src: templates/bash_profile.j2
-    dest: "/home/{{ item }}/.bash_profile"
-    owner: "{{ item }}"
-    group: "{{ item }}"
-    force: yes
+- name: Update dotfiles
+  shell:
+    cmd: "umask 007; chezmoi update --force"
+  become: true
+  become_user: "{{ item }}"
   with_items: "{{ dotfile_users }}"
-  when: dotfiles.changed
