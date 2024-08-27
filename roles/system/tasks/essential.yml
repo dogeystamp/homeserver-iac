@@ -61,7 +61,7 @@
 - name: Setup reboot cronjob
   cron:
     name: "Reboot system"
-    minute: 59
-    hour: 11
+    minute: 55
+    hour: 23
     weekday: 5
     job: "reboot"
