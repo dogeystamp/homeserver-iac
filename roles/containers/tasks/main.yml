@@ -113,6 +113,16 @@
     group: vault
     mode: "u=rwX,g=rwX,o="
 
+- name: Set ACL to allow navidrome to read synced music
+  ansible.posix.acl:
+    default: true
+    entity: navidrome
+    etype: user
+    permissions: rx
+    recursive: true
+    state: present
+    path: "{{ music_path }}"
+
 - name: Create docker-compose directory
   ansible.builtin.file:
     path: "{{ docker_compose_dir }}"
