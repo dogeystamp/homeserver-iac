@@ -21,28 +21,6 @@
     mode: 700
   register: rmconn
 
-- name: Run rmconn every 30 minutes
-  cron:
-    name: "Ensure eth0 is not externally managed"
-    minute: "*/30"
-    job: "/root/rmconn.sh"
-    state: present
-
-- name: Run rmconn every minute (temporarily)
-  cron:
-    name: "Ensure eth0 is not externally managed (temporary)"
-    minute: "*"
-    job: "/root/rmconn.sh"
-    state: present
-  when: rmconn.changed
-
-- name: Run rmconn at boot
-  cron:
-    name: "Ensure eth0 is not externally managed (at reboot)"
-    special_time: reboot
-    job: "/root/rmconn.sh"
-    state: present
-
 - name: Disable DHCP DNS
   template:
     src: nodns.network.j2
@@ -85,6 +63,28 @@
   poll: 0
   async: 1000
 
+- name: Run rmconn every 30 minutes
+  cron:
+    name: "Ensure eth0 is not externally managed"
+    minute: "*/30"
+    job: "/root/rmconn.sh"
+    state: present
+
+- name: Run rmconn every minute (temporarily)
+  cron:
+    name: "Ensure eth0 is not externally managed (temporary)"
+    minute: "*"
+    job: "/root/rmconn.sh"
+    state: present
+  when: rmconn.changed
+
+- name: Run rmconn at boot
+  cron:
+    name: "Ensure eth0 is not externally managed (at reboot)"
+    special_time: reboot
+    job: "/root/rmconn.sh"
+    state: present
+
 - name: Reset Ansible connection params
   set_fact:
     ansible_host: "{{ local_ip }}"
@@ -94,7 +94,6 @@
   wait_for_connection:
     timeout: 240
   when: nmcli_conf.changed or rmconn.changed
-
 
 - name: Remove rmconn task at every minute
   cron:
