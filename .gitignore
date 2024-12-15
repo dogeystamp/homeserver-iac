@@ -3,3 +3,4 @@ host_vars
 inventory.yml
 group_vars/all/80-vault.yml
 group_vars/all/90-overlay.yml
+group_vars/bastion/90-overlay.yml
