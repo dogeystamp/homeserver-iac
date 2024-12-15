@@ -1,11 +1,17 @@
-// vim:set ts=4 sw=4 et:
+// vim:set filetype=named ts=4 sw=4 et:
+
+acl locals {
+    127.0.0.0/8;
+};
 
 acl internals { 
-    127.0.0.0/8;
     {{ local_subnet }};
-    {% if wireguard is defined %}
+};
+
+acl vpns {
+{% if wireguard is defined %}
     {{ wireguard.ip.cidr }};
-    {% endif %}
+{% endif %}
 };
 
 options {
@@ -16,30 +22,44 @@ options {
     listen-on { any; };
 
     recursion yes;
-    allow-recursion { any; };
-    allow-query { internals; };
+    allow-recursion { internals; locals; vpns; };
+    allow-query { internals; locals; vpns; };
     allow-transfer { none; };
     dnssec-validation no;
     resolver-query-timeout 30000;
 };
 
-zone "localhost" IN {
-    type master;
-    file "localhost.zone";
+view "local-view" {
+    match-clients { locals; };
+    zone "localhost" IN {
+        type master;
+        file "localhost.zone";
+    };
+
+    zone "0.0.127.in-addr.arpa" IN {
+        type master;
+        file "127.0.0.zone";
+    };
+
+    zone "1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa" {
+        type master;
+        file "localhost.ip6.zone";
+    };
 };
 
-zone "0.0.127.in-addr.arpa" IN {
-    type master;
-    file "127.0.0.zone";
+
+view "internal-view" {
+    match-clients { internals; };
+    zone "{{ dyndns_domain }}" {
+        type master;
+        file "/var/named/{{ dyndns_domain }}";
+    };
 };
 
-zone "{{ dyndns_domain }}" {
-             type master;
-             file "/var/named/{{ dyndns_domain }}";
-        };
-
-
-zone "1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa" {
-    type master;
-    file "localhost.ip6.zone";
+view "vpn-view" {
+    match-clients { vpns; };
+    zone "{{ dyndns_domain }}" {
+        type master;
+        file "/var/named/{{ dyndns_domain }}.vpn";
+    };
 };

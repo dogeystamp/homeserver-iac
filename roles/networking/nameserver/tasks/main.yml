@@ -1,19 +1,32 @@
-- name: Install nameserver packages
-  community.general.pacman:
-    name: bind
-    state: present
-
+# - name: Install nameserver packages
+#   community.general.pacman:
+#     name: bind
+#     state: present
+#
 - name: Configure nameserver
   template:
     src: named.conf.j2
     dest: /etc/named.conf
+    validate: /usr/bin/named-checkconf %s
   notify: Restart nameserver
 
-- name: Add nameserver zone
+- name: Add nameserver zone (LAN)
   template:
     src: local_zone.j2
     dest: "/var/named/{{ dyndns_domain }}"
   notify: Restart nameserver
+  vars:
+    resolve_ip: "{{ local_ip }}"
+    serial: "42"
+
+- name: Add nameserver zone (VPN)
+  template:
+    src: local_zone.j2
+    dest: "/var/named/{{ dyndns_domain }}.vpn"
+  notify: Restart nameserver
+  vars:
+    resolve_ip: "{{ vpn_ip }}"
+    serial: "43"
 
 - name: Enable nameserver
   service:
