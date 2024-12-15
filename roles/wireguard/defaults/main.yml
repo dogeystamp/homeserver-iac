@@ -17,7 +17,7 @@ wireguard:
     # cidr range in tunnel
     cidr: "10.66.77.0/24"
 
-    server_public: "www.{{ domain }}"
+    server_public: "net.{{ domain }}"
     # UDP port
     port: 51820
 
