@@ -48,6 +48,10 @@
       port: 8000
       interface: service
 
+    - name: "xandikos"
+      port: 8001
+      interface: service
+
     - name: "syncthing"
       port: 22000
       proto: any

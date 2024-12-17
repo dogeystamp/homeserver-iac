@@ -54,6 +54,26 @@
     append: yes
     groups: vault
 
+- name: Create Xandikos group
+  group:
+    name: xandikos
+    state: present
+  register: group_xandikos
+
+- name: Create Xandikos user
+  user:
+    name: xandikos
+    group: xandikos
+  register: user_xandikos
+
+- name: Create Xandikos data directory
+  file:
+    path: "{{ dataroot }}/xandikos"
+    state: directory
+    owner: xandikos
+    group: xandikos
+    mode: "u=rwX,g=,o="
+
 - name: Create Paperless group
   group:
     name: paperless

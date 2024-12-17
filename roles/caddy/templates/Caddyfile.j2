@@ -30,6 +30,19 @@ www.{{ domain }} {
 }
 {% endif %}
 
+{% if groups["xandikos"] | length > 0 %}
+{{ xandikos_domain }} {
+	import external
+	respond @external 403
+
+	basic_auth {
+		user {{ xandikos_pw_hash }}
+	}
+
+	reverse_proxy {{ groups["xandikos"][0] }}:8001
+}
+{% endif %}
+
 {% if groups["navidrome"] | length > 0 %}
 {{ navidrome_domain }} {
 	import external

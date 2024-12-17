@@ -53,6 +53,9 @@ all:
         paperless:
           hosts:
             your_fleet_host:
+        xandikos:
+          hosts:
+            your_fleet_host:
     bastion:
       children:
         ddclient:

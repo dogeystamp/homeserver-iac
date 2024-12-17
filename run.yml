@@ -45,16 +45,16 @@
       tags:
         - ddclient
       when: enable_ddclient
-        
+
     - role: networking/nameserver
       tags:
         - nameserver
       when: '"nameserver" in group_names'
-        
+
     - role: networking/hosts
       tags:
         - hosts
-    
+
     - role: mail
       tags:
         - mail

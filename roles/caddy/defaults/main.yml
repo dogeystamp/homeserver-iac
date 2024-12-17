@@ -10,6 +10,7 @@ gitea_domain: "git.{{ domain }}"
 navidrome_domain: "mus.{{ domain }}"
 matrix_domain: "m.{{ domain }}"
 paperless_domain: "doc.{{ domain }}"
+xandikos_domain: "cal.{{ domain }}"
 
 ## send renewal reminders to this address
 email: null

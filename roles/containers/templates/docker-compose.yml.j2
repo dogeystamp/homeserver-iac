@@ -90,6 +90,19 @@ services:
 
 {% endif %}
 
+{% if "xandikos" in group_names %}
+  xandikos:
+    user: {{ user_xandikos.uid }}:{{ user_xandikos.group }}
+    image: ghcr.io/jelmer/xandikos
+    ports:
+      - 8001:8000
+    environment:
+      - USERNAME=xandikos
+      - EMAIL="xandikos@{{ domain }}"
+    volumes:
+      - "{{ dataroot }}/xandikos:/data"
+{% endif %}
+
 {% if "paperless" in group_names %}
   paperless-broker:
     container_name: paperless-broker
