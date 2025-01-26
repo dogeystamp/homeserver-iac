@@ -32,9 +32,6 @@ www.{{ domain }} {
 
 {% if groups["xandikos"] | length > 0 %}
 {{ xandikos_domain }} {
-	import external
-	respond @external 403
-
 	basic_auth {
 		user {{ xandikos_pw_hash }}
 	}
