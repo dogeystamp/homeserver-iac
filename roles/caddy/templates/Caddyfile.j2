@@ -24,9 +24,12 @@ www.{{ domain }} {
 }
 {% endif %}
 
-{% if groups["gitea"] | length > 0 %}
-{{ gitea_domain }} {
-	reverse_proxy {{ groups["gitea"][0] }}:3000
+{% if groups["forgejo"] | length > 0 %}
+{{ forgejo_domain }} {
+	import external
+	respond @external 403
+
+	reverse_proxy {{ groups["forgejo"][0] }}:3000
 }
 {% endif %}
 

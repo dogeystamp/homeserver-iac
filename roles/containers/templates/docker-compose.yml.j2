@@ -7,35 +7,38 @@
 ---
 
 networks:
-  gitea:
+  forgejo:
     driver: bridge
   navidrome:
     driver: bridge
 
 services:
-{% if "gitea" in group_names %}
-  gitea:
-    container_name: gitea
-    image: gitea/gitea:latest
+
+{% if "forgejo" in group_names %}
+  forgejo:
+    container_name: forgejo
+    image: codeberg.org/forgejo/forgejo:10
     environment:
-      - USER=gitea
-      - USER_UID={{ user_gitea.uid }}
-      - USER_GID={{ user_gitea.group }}
-      - GITEA__service__DISABLE_REGISTRATION=true
-      - GITEA__server__DOMAIN={{ gitea_domain }}
-      - GITEA__server__SSH_DOMAIN={{ gitea_domain }}
+      - USER_UID={{ user_forgejo.uid }}
+      - USER_GID={{ user_forgejo.group }}
+      - FORGEJO__service__DISABLE_REGISTRATION=true
+      - FORGEJO__server__DOMAIN={{ forgejo_domain }}
+      - FORGEJO__server__SSH_DOMAIN={{ forgejo_domain }}
+      - FORGEJO__server__SSH_PORT=2498
+      - FORGEJO__server__ROOT_URL=https://{{ forgejo_domain }}/
+      - FORGEJO__CRON_0x2E_UPDATE_CHECKER__ENABLED=false
     ports:
       - "127.0.0.1:3000:3000"
       - "127.0.0.1:2498:22"
     restart: unless-stopped
     volumes:
-      - {{ dataroot }}/gitea:/data
+      - {{ dataroot }}/forgejo:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     networks:
-      - gitea
-
+      - forgejo
 {% endif %}
+
 {% if "syncthing" in group_names %}
   syncthing:
     network_mode: host

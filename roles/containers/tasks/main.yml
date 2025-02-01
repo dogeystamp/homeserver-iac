@@ -11,11 +11,20 @@
     name: docker
     group: docker
 
-- name: Create Gitea user
+- name: Create Forgejo user
   user:
-    name: gitea
-  register: user_gitea
-  when: '"gitea" in group_names'
+    name: forgejo
+    group: forgejo
+  register: user_forgejo
+  when: '"forgejo" in group_names'
+
+- name: Create Forgejo data dir
+  file:
+    path: "{{ dataroot }}/forgejo"
+    state: directory
+    owner: forgejo
+    group: forgejo
+    mode: "u=rwX,g=,o="
 
 - name: Create Syncthing group
   group:
