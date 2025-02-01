@@ -6,12 +6,12 @@ defaults
 	timeout server 36h
 	balance leastconn
 
-{% if groups["gitea"] | length > 0 %}
-listen gitea_ssh
+{% if groups["forgejo"] | length > 0 %}
+listen forgejo_ssh
 	bind *:2499
 	option tcp-check
 	tcp-check expect rstring SSH-2.0-OpenSSH.*
-{% for host in groups["gitea"] %}
+{% for host in groups["forgejo"] %}
 	server {{ host }} {{ host }}:2498
 {% endfor %}
 {% endif %}

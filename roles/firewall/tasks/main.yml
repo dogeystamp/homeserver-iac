@@ -61,14 +61,14 @@
       port: "{{ sshd_port }}"
       src: "{{ 'any' if 'bastion' in group_names else local_subnet }}"
 
-    # gitea sshd
+    # forgejo sshd
     - name: "bastion"
       port: 2499
-    - name: "gitea"
+    - name: "forgejo"
       port: 2498
       interface: service
-    # gitea http
-    - name: "gitea"
+    # forgejo http
+    - name: "forgejo"
       port: 3000
       interface: service
 
