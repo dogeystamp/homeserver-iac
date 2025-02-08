@@ -13,7 +13,7 @@
 - name: Enumerate services to forward
   set_fact:
     haproxy_services:
-      - name: gitea
+      - name: forgejo
         ports:
           - 2498
           - 3000
